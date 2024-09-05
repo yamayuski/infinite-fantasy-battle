@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "EditorConfig.EditorConfig",
-    "Redocly.openapi-vs-code"
+    "Redocly.openapi-vs-code",
+    "ms-azuretools.vscode-docker"
   ]
 }

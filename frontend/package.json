@@ -1,0 +1,10 @@
+{
+  "name": "infinite-fantasy-battle",
+  "version": "0.0.1",
+  "description": "Infinite FANTASY BATTLE simulator",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {},
+  "author": "Masaru Yamagishi <m.yamagishi90+git@gmail.com>",
+  "license": "MIT"
+}

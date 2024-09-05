@@ -1,0 +1,23 @@
+{
+  "name": "yamayuski/infinite-fantasy-battle",
+  "description": "Infinite FANTASY BATTLE simulator",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Masaru Yamagishi",
+      "email": "m.yamagishi90+git@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "cakephp/chronos": "^3.1",
+    "rayleigh/framework": "dev-main"
+  },
+  "prefer-stable": true,
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  }
+}
