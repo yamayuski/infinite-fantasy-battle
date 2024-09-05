@@ -1,0 +1,28 @@
+openapi:  3.1.0
+info:
+  title: Infinite FANTASY BATTLE simulator OpenAPI
+  version: 0.0.1
+  license:
+    name: MIT License
+    identifier: MIT
+    url: https://spdx.org/licenses/MIT.html
+servers:
+  - url: https://ifb-dev.cafe-capy.net
+    description: Dev server
+tags:
+  - name: Healthcheck
+    description: healthcheck
+paths:
+  /api:
+    get:
+      operationId: Healthcheck
+      summary: Healthcheck endpoint
+      tags:
+        -  Healthcheck
+      security: []
+components:
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: Bearer
+      bearerFormat: JWT
