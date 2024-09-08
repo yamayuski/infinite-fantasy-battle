@@ -12,7 +12,8 @@
   "minimum-stability": "dev",
   "require": {
     "cakephp/chronos": "^3.1",
-    "rayleigh/framework": "dev-main"
+    "shibare/framework": "dev-main",
+    "spiral/roadrunner-http": "^3.5"
   },
   "prefer-stable": true,
   "config": {

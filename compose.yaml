@@ -1,0 +1,51 @@
+services:
+  ingress:
+    build:
+      context: docker/ingress
+    read_only: true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ingress-cache:/var/cache/nginx
+      - ingress-pid:/var/run
+    environment:
+      - TZ=Asia/Tokyo
+    networks:
+      - web
+    depends_on:
+      - backend
+      - frontend
+
+  backend:
+    build:
+      context: backend
+    volumes:
+      - ./backend:/src
+    ports:
+      - 8080
+      - 6001
+    networks:
+      - web
+
+  frontend:
+    build:
+      context: frontend
+    command:
+      - npm
+      - run
+      - dev
+    volumes:
+      - ./frontend:/src
+    ports:
+      - 5173
+    networks:
+      - web
+
+volumes:
+  ingress-cache: {}
+  ingress-pid: {}
+
+networks:
+  web:
+    name: web

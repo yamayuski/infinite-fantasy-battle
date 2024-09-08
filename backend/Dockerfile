@@ -1,12 +1,33 @@
-ARG PHP_VERSION=8.3.11-cli-alpine3.20
+ARG PHP_VERSION=8.3-cli-alpine
 
-ARG RR_VERSION=2024.2.0
+ARG RR_VERSION=2024
+
+ARG EXTENSION_INSTALLER_VERSION=2
+
+FROM spiralscout/roadrunner:${RR_VERSION} AS rr
+FROM mlocati/php-extension-installer:${EXTENSION_INSTALLER_VERSION} AS ext
 
 FROM php:${PHP_VERSION}
 
-RUN useradd -aG rr
+COPY --from=ext /usr/bin/install-php-extensions /usr/local/bin/install-php-extensions
+RUN install-php-extensions opcache pdo_mysql protobuf gettext intl redis zip sockets @composer-2
 
-COPY --from=mlocati/php-extension-installer --chown=rr:rr /usr/bin/install-php-extensions /usr/loca/bin/install-php-extensions
-COPY --from=spiralscout/roadrunner:${RR_VERSION} --chown=rr:rr /usr/bin/rr /usr/local/bin/rr
+COPY --from=rr /usr/bin/rr /usr/local/bin/rr
 
-RUN install-php-extension opcache pdo_mysql protobuf gettext intl redis zip
+WORKDIR /src
+
+RUN chown www-data:www-data /src
+
+USER www-data
+
+COPY composer.* .
+
+RUN composer install --no-autoloader
+
+COPY . .
+
+RUN composer dump-autoload
+
+EXPOSE 8080
+
+CMD [ "rr", "serve", "-c", "/src/.rr.yaml" ]

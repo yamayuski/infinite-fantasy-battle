@@ -1,5 +1,15 @@
-ARG NODEJS_VERSION=22-alpine3.20
+ARG NODEJS_VERSION=22
 
 FROM node:${NODEJS_VERSION}
 
-RUN npm ci && npm run build
+WORKDIR /src
+
+COPY package*.json .
+
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
+CMD ["npm", "run", "preview"]
