@@ -12,7 +12,8 @@ http:
   fcgi:
     address: tcp://0.0.0.0:9000
   pool:
-    num_workers: 10
+    debug: true # for debugging
+    num_workers: 2
 
 logs:
   encoding: json

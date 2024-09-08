@@ -1,0 +1,4 @@
+{
+  "phpstan.binPath": "backend/vendor/bin/phpstan",
+  "phpstan.configFile": "backend/phpstan.dist.neon"
+}

@@ -9,6 +9,9 @@
       "email": "m.yamagishi90+git@gmail.com"
     }
   ],
+  "scripts": {
+    "test": "phpunit"
+  },
   "autoload": {
     "psr-4": {
       "Ifb\\": "src"
@@ -30,5 +33,9 @@
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.12",
+    "phpunit/phpunit": "^11.3"
   }
 }

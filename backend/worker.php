@@ -23,12 +23,32 @@ use Shibare\Log\Writers\StderrWriter;
     $logger = new Logger([
         new StderrWriter(new JsonLineFormatter()),
     ]);
+    Logger::setInstance($logger);
 
     $handler = new RoutingHandler();
+    $handler->options('*', new class () implements RequestHandlerInterface {
+        public function handle(ServerRequestInterface $request): ResponseInterface
+        {
+            $headers = [
+                'Access-Control-Allow-Origin' => ['https://ifb.test'],
+                'Access-Control-Allow-Methods' => ['POST, GET, OPTIONS'],
+                'Access-Control-Allow-Headers' => ['Content-Type, Content-Length'],
+            ];
+            return new Response(204, $headers);
+        }
+    });
     $handler->get('/', new class () implements RequestHandlerInterface {
         public function handle(ServerRequestInterface $request): ResponseInterface
         {
-            return new Response();
+            $body = '{"ok":false}';
+            $headers = [
+                'Content-Type' => ['application/json'],
+                'Content-Length' => [\strlen($body)],
+                'Access-Control-Allow-Origin' => ['https://ifb.test'],
+                'Access-Control-Allow-Methods' => ['POST, GET, OPTIONS'],
+                'Access-Control-Allow-Headers' => ['Content-Type, Content-Length'],
+            ];
+            return new Response(headers: $headers, body: $body);
         }
     }, []);
 
