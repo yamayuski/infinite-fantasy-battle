@@ -9,6 +9,16 @@
       "email": "m.yamagishi90+git@gmail.com"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "Ifb\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ifb\\": "tests"
+    }
+  },
   "minimum-stability": "dev",
   "require": {
     "cakephp/chronos": "^3.1",

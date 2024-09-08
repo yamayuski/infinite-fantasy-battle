@@ -12,17 +12,128 @@ servers:
 tags:
   - name: Healthcheck
     description: healthcheck
+  - name: Authentication
+    description: authentication
 paths:
-  /api:
+  /:
     get:
       operationId: Healthcheck
       summary: Healthcheck endpoint
       tags:
         -  Healthcheck
       security: []
+      responses:
+        default:
+          description: Ok
+          content:
+            plain/text:
+              schema:
+                type: string
+        '4XX':
+          description: Ok
+          content:
+            plain/text:
+              schema:
+                type: string
+  /api/auth/register:
+    post:
+      operationId: RegisterAuth
+      summary: Register new user
+      tags:
+        - Authentication
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/AcceptJson"
+        - $ref: "#/components/parameters/ContentTypeJson"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "john.doe@example.com"
+              required:
+                -  email
+      responses:
+        '200':
+          description: Ok
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              required: true
+              example: application/json; charset=UTF-8
+            Content-Length:
+              schema:
+                type: integer
+              required: true
+              example: 100
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    $ref: "#/components/schemas/LoginToken"
+                required:
+                  -  token
+        '4XX':
+          $ref: "#/components/responses/InvalidRequestResponse"
+
 components:
+  parameters:
+    AcceptJson:
+      in: header
+      required: true
+      name: Accept
+      example: application/json; charset=UTF-8
+      schema:
+        type: string
+    ContentTypeJson:
+      in: header
+      required: true
+      name: Content-Type
+      example: application/json; charset=UTF-8
+      schema:
+        type: string
+  responses:
+    InvalidRequestResponse:
+      description: Invalid request response
+      headers:
+        Content-Type:
+          schema:
+            type: string
+          required: true
+          example: application/json; charset=UTF-8
+        Content-Length:
+          schema:
+            type: integer
+          required: true
+          example: 100
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              messages:
+                type: array
+                items:
+                  type: string
+            required:
+              - ok
+              - messages
+  schemas:
+    LoginToken:
+      type: string
+      example: exampleToken
   securitySchemes:
     apiKey:
       type: http
       scheme: Bearer
-      bearerFormat: JWT
+      bearerFormat: token
