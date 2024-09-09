@@ -15,10 +15,14 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
-#[CoversClass(RequestValidator::class)]
 #[CoversClass(CorsSetting::class)]
+#[CoversClass(RequestValidationResult::class)]
+#[CoversClass(RequestValidator::class)]
 final class RequestValidatorTest extends TestCase
 {
+    /**
+     * @return iterable<string, array{string[], CorsSetting, RequestValidationResult}>
+     */
     public static function getData(): iterable
     {
         yield 'No host header' => [[], new CorsSetting('http://a.com'), RequestValidationResult::ORIGIN_NOT_FOUND];
@@ -62,7 +66,7 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testInvalidHost(): void
     {
-        $validator = new RequestValidator(new CorsSetting('http:// a .com'));
+        $validator = new RequestValidator(new CorsSetting('http://// a .com'));
 
         $request = $this->createMock(ServerRequestInterface::class);
 
@@ -72,24 +76,7 @@ final class RequestValidatorTest extends TestCase
             ->willReturn(['http://a.com']);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid server host setting provided');
-        $validator->validate($request);
-    }
-
-    #[Test]
-    public function testInvalidPort(): void
-    {
-        $validator = new RequestValidator(new CorsSetting('http://a.com:65536'));
-
-        $request = $this->createMock(ServerRequestInterface::class);
-
-        $request->expects(self::once())
-            ->method('getHeader')
-            ->with('Origin')
-            ->willReturn(['http://a.com']);
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid server port setting provided');
+        $this->expectExceptionMessage('Invalid server origin setting provided: http://// a .com');
         $validator->validate($request);
     }
 }

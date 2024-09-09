@@ -21,6 +21,11 @@ class RequestValidator
         private readonly CorsSetting $setting,
     ) {}
 
+    /**
+     * Validate request
+     * @param ServerRequestInterface $request
+     * @return RequestValidationResult
+     */
     public function validate(ServerRequestInterface $request): RequestValidationResult
     {
         $origin_header = $this->getSingleHeader($request, 'Origin');
@@ -32,7 +37,7 @@ class RequestValidator
             return RequestValidationResult::SAME_ORIGIN;
         }
 
-        if (!$this->validateOrigin($origin_header)) {
+        if (!$this->isAllowedOrigin($origin_header)) {
             return RequestValidationResult::ORIGIN_NOT_ALLOWED;
         }
 
@@ -51,57 +56,35 @@ class RequestValidator
     }
 
     /**
-     * Validate Host header
-     * @param string $host
-     * @return bool
-     * @throws InvalidArgumentException
-     */
-    private function isSameHost(string $host): bool
-    {
-        $server_host_part = \parse_url($this->setting->server_origin, \PHP_URL_HOST);
-        if (!\is_string($server_host_part)) {
-            throw new \InvalidArgumentException('Invalid server host setting provided');
-        }
-        $server_port_part = \parse_url($this->setting->server_origin, \PHP_URL_PORT);
-        if (!\is_string($server_port_part) && !\is_null($server_port_part)) {
-            throw new \InvalidArgumentException('Invalid server port setting provided');
-        }
-
-        $host_part = \parse_url($host, \PHP_URL_HOST);
-        if (!\is_string($host_part)) {
-            return false;
-        }
-        $port_part = \parse_url($host, \PHP_URL_PORT);
-        \assert(\is_int($port_part) || \is_null($port_part));
-
-        $is_same_host = 0 === \strcasecmp($server_host_part, $host_part);
-        $is_same_port = $server_port_part === $port_part;
-
-        return $is_same_host && $is_same_port;
-    }
-
-    /**
      * Validate Origin header
      * @param string $origin
      * @return bool
      */
     private function isSameOrigin(string $origin): bool
     {
-        if (!$this->isSameHost($origin)) {
+        $server_parts = \parse_url($this->setting->server_origin);
+
+        if (!\is_array($server_parts)) {
+            throw new InvalidArgumentException('Invalid server origin setting provided: ' . $this->setting->server_origin);
+        }
+        $origin_parts = \parse_url($origin);
+        if (!\is_array($origin_parts)) {
             return false;
         }
 
-        $server_scheme_part = \parse_url($this->setting->server_origin, \PHP_URL_SCHEME);
+        $is_same_scheme = 0 === \strcasecmp($server_parts['scheme'] ?? '', $origin_parts['scheme'] ?? '');
+        $is_same_host = 0 === \strcasecmp($server_parts['host'] ?? '', $origin_parts['host'] ?? '');
+        $is_same_port = ($server_parts['port'] ?? null) === ($origin_parts['port'] ?? null);
 
-        $scheme_part = \parse_url($origin, \PHP_URL_SCHEME);
-        if (!\is_string($scheme_part)) {
-            return false; // @codeCoverageIgnore
-        }
-
-        return 0 === \strcasecmp($scheme_part, $server_scheme_part);
+        return $is_same_scheme && $is_same_host && $is_same_port;
     }
 
-    private function validateOrigin(string $origin): bool
+    /**
+     * Validate Origin header is allowed
+     * @param string $origin
+     * @return bool
+     */
+    private function isAllowedOrigin(string $origin): bool
     {
         foreach ($this->setting->allow_origin as $allow) {
             if (0 === \strcasecmp($origin, $allow)) {

@@ -29,6 +29,16 @@ enum RequestValidationResult
     case ORIGIN_NOT_ALLOWED;
 
     /**
+     * The request method is not allowed
+     */
+    case METHOD_NOT_ALLOWED;
+
+    /**
+     * The request headers are not allowed
+     */
+    case HEADERS_NOT_ALLOWED;
+
+    /**
      * The request origin is valid and cross origin
      */
     case VALID_CROSS_ORIGIN;

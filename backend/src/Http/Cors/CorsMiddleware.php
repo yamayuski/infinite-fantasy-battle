@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ifb\Http\Cors;
 
+use Ifb\Http\RouteResolverInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,25 +21,33 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class CorsMiddleware implements MiddlewareInterface, RequestHandlerInterface
 {
-    /**
-     *
-     * @param string[] $allow_origin
-     * @param string[] $allow_methods
-     * @param string[] $allow_headers
-     * @param string[] $expose_headers
-     * @param string[] $vary
-     * @param bool $allow_credentials
-     * @param int $max_age
-     * @return void
-     */
     public function __construct(
         private readonly ResponseFactoryInterface $response_factory,
         private readonly RequestValidator $validator,
+        private readonly RouteResolverInterface $route_resolver,
     ) {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        if (\strtoupper($request->getMethod()) !== 'OPTIONS') {
+            return $this->response_factory->createResponse(405);
+        }
+
+        $request_method = $request->getHeaderLine('Access-Control-Request-Method');
+        $route = $this->route_resolver->resolve($request_method, $request->getUri()->getPath());
+        if (!$route) {
+            return $this->response_factory->createResponse(404);
+        }
+
+        $result = $this->validator->validate($request);
+
+        return match ($result) {
+            RequestValidationResult::ORIGIN_NOT_FOUND => $this->response_factory->createResponse(400),
+            RequestValidationResult::SAME_ORIGIN => $this->response_factory->createResponse(200),
+            RequestValidationResult::ORIGIN_NOT_ALLOWED => $this->response_factory->createResponse(403),
+            RequestValidationResult::VALID_CROSS_ORIGIN => $this->response_factory->createResponse(204),
+        };
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
