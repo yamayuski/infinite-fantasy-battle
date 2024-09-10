@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace Ifb\Http;
 
-use Psr\Http\Server\RequestHandlerInterface;
+use JsonSerializable;
 
 /**
  * Route information
  */
-final class Route
+final class Route implements JsonSerializable
 {
     /** @var array<string, string> $path_attributes */
     private array $path_attributes = [];
@@ -23,13 +23,13 @@ final class Route
      * Constructor
      * @param string $method
      * @param string $path
-     * @param RequestHandlerInterface $handler
-     * @param array<int, \Psr\Http\Server\MiddlewareInterface> $middlewares
+     * @param class-string $handler
+     * @param array<int, class-string> $middlewares
      */
     public function __construct(
         public readonly string $method,
         public readonly string $path,
-        public readonly RequestHandlerInterface $handler,
+        public readonly string $handler,
         public readonly array $middlewares = [],
     ) {}
 
@@ -39,17 +39,32 @@ final class Route
      * @param string $value
      * @return void
      */
-    public function setPathAttributes(string $key, string $value): void
+    public function setPathAttribute(string $key, string $value): void
     {
         $this->path_attributes[$key] = $value;
     }
 
     /**
-     * Get path attributes
-     * @return array<string, string>
+     * Get path attribute
+     * @param string $key
+     * @return ?string
      */
-    public function getPathAttributes(): array
+    public function getPathAttribute(string $key): ?string
     {
-        return $this->path_attributes;
+        if (\array_key_exists($key, $this->path_attributes)) {
+            return $this->path_attributes[$key];
+        }
+        return null;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'method' => $this->method,
+            'path' => $this->path,
+            'handler' => $this->handler,
+            'middlewares' => $this->middlewares,
+            'path_attributes' => $this->path_attributes,
+        ];
     }
 }

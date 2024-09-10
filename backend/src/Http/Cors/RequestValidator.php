@@ -41,6 +41,16 @@ class RequestValidator
             return RequestValidationResult::ORIGIN_NOT_ALLOWED;
         }
 
+        $request_method = $this->getSingleHeader($request, 'Access-Control-Request-Method');
+        if (!$this->isAllowedMethod($request_method)) {
+            return RequestValidationResult::METHOD_NOT_ALLOWED;
+        }
+
+        $request_headers = $request->getHeader('Access-Control-Request-Headers');
+        if (\count($request_headers) > 0 && !$this->isAllowedHeadersAll($request_headers)) {
+            return RequestValidationResult::HEADERS_NOT_ALLOWED;
+        }
+
         return RequestValidationResult::VALID_CROSS_ORIGIN;
     }
 
@@ -88,6 +98,44 @@ class RequestValidator
     {
         foreach ($this->setting->allow_origin as $allow) {
             if (0 === \strcasecmp($origin, $allow)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function isAllowedMethod(?string $method): bool
+    {
+        if (\is_null($method)) {
+            return false;
+        }
+
+        foreach ($this->setting->allow_methods as $allow) {
+            if (0 === \strcasecmp($method, $allow)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string[] $headers
+     * @return bool
+     */
+    private function isAllowedHeadersAll(array $headers): bool
+    {
+        foreach ($headers as $header) {
+            if (!$this->isAllowedHeader($header)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function isAllowedHeader(string $header): bool
+    {
+        foreach ($this->setting->allow_headers as $allow) {
+            if (0 === \strcasecmp($header, $allow)) {
                 return true;
             }
         }

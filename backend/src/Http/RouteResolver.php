@@ -62,7 +62,7 @@ final class RouteResolver implements RouteResolverInterface
             $result = \array_filter($matches, fn(string|int $key): bool => !\is_int($key), \ARRAY_FILTER_USE_KEY);
 
             foreach ($result as $key => $value) {
-                $route->setPathAttributes($key, $value);
+                $route->setPathAttribute($key, $value);
             }
             return true;
         }
