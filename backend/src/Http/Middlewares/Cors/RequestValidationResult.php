@@ -6,7 +6,7 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http\Cors;
+namespace Ifb\Http\Middlewares\Cors;
 
 /**
  * @package Ifb\Http\Cors

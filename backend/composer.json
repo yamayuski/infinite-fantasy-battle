@@ -10,7 +10,11 @@
     }
   ],
   "scripts": {
-    "test": "phpunit"
+    "test": "phpunit",
+    "lint": [
+      "phpstan analyse src tests",
+      "php-cs-fixer fix --dry-run --diff"
+    ]
   },
   "autoload": {
     "psr-4": {
@@ -32,10 +36,16 @@
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "phpstan/extension-installer": true
+    }
   },
   "require-dev": {
+    "mockery/mockery": "^1.6",
+    "phpstan/extension-installer": "^1.4",
     "phpstan/phpstan": "^1.12",
+    "phpstan/phpstan-mockery": "^1.1",
     "phpunit/phpunit": "^11.3"
   }
 }

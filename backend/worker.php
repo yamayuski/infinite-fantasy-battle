@@ -9,9 +9,10 @@ declare(strict_types=1);
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Ifb\Http\Controllers\IndexController;
-use Ifb\Http\Cors\CorsMiddleware;
-use Ifb\Http\Cors\CorsSetting;
-use Ifb\Http\ExceptionHandlerMiddleware;
+use Ifb\Http\Middlewares\Cors\CorsMiddleware;
+use Ifb\Http\Middlewares\Cors\CorsSetting;
+use Ifb\Http\Middlewares\ExceptionHandlerMiddleware;
+use Ifb\Http\Middlewares\JsonRequestResponseMiddleware;
 use Ifb\Http\Route;
 use Ifb\Http\RouteResolver;
 use Ifb\Http\RouteResolverInterface;
@@ -19,11 +20,13 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Shibare\Container\Container;
 use Shibare\HttpFactory\ResponseFactory;
+use Shibare\HttpFactory\StreamFactory;
 use Shibare\HttpServer\RoadRunnerHttpDispatcher;
 use Shibare\HttpServer\ServerRequestRunner;
 use Shibare\Log\Formatters\JsonLineFormatter;
@@ -31,18 +34,20 @@ use Shibare\Log\Logger;
 use Shibare\Log\Writers\StderrWriter;
 
 (static function (): void {
-    $dispatcher = new RoadRunnerHttpDispatcher();
+    $container = new Container();
+    $container->bind(ContainerInterface::class, $container);
     $logger = new Logger([
         new StderrWriter(new JsonLineFormatter()),
     ]);
     Logger::setInstance($logger);
-    $container = new Container();
     $container->bind(LoggerInterface::class, $logger);
     $response_factory = new ResponseFactory();
     $container->bind(ResponseFactoryInterface::class, $response_factory);
+    $container->bind(StreamFactoryInterface::class, new StreamFactory());
     $global_middlewares = [
         ExceptionHandlerMiddleware::class,
         CorsMiddleware::class,
+        JsonRequestResponseMiddleware::class,
     ];
     $routes = [
         new Route('GET', '/', IndexController::class, []),
@@ -53,7 +58,7 @@ use Shibare\Log\Writers\StderrWriter;
         server_origin: 'https://api.ifb.test',
         allow_origin: ['https://ifb.test'],
         allow_methods: ['GET', 'POST'],
-        allow_headers: ['Content-Type'],
+        allow_headers: ['Content-Type', 'Accept'],
         expose_headers: [],
         vary: ['Origin'],
         allow_credentials: true,
@@ -116,5 +121,6 @@ use Shibare\Log\Writers\StderrWriter;
         }
     };
 
+    $dispatcher = new RoadRunnerHttpDispatcher();
     $dispatcher->serve($logger, $global_middlewares_handler);
 })();
