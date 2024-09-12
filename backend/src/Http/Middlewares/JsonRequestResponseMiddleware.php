@@ -38,9 +38,9 @@ final readonly class JsonRequestResponseMiddleware implements MiddlewareInterfac
         if ($request->hasHeader('Content-Type')) {
             $content_type = $request->getHeaderLine('Content-Type');
             if (!\str_starts_with($content_type, 'application/json')) {
-                return $this->createResponse(415, '{"message":"Content-Type must be application/json"}');
+                return $this->createResponse(415, '{"message":"Content-Type header must be application/json"}');
             }
-            $parsed_body = \json_decode($request->getBody()->getContents(), true, \JSON_THROW_ON_ERROR);
+            $parsed_body = @\json_decode($request->getBody()->getContents(), true);
             if (!\is_array($parsed_body)) {
                 return $this->createResponse(400, '{"message":"Invalid JSON"}');
             }

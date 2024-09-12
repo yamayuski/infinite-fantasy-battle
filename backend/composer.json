@@ -14,7 +14,9 @@
     "lint": [
       "phpstan analyse src tests",
       "php-cs-fixer fix --dry-run --diff"
-    ]
+    ],
+    "coverage": "php -d pcov.enabled=1 vendor/bin/phpunit --coverage-html=coverage",
+    "coverage-html": "php -S localhost:8080 -t coverage"
   },
   "autoload": {
     "psr-4": {

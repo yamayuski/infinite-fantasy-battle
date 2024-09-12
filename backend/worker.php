@@ -11,7 +11,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Ifb\Http\Controllers\IndexController;
 use Ifb\Http\Middlewares\Cors\CorsMiddleware;
 use Ifb\Http\Middlewares\Cors\CorsSetting;
-use Ifb\Http\Middlewares\ExceptionHandlerMiddleware;
 use Ifb\Http\Middlewares\JsonRequestResponseMiddleware;
 use Ifb\Http\Route;
 use Ifb\Http\RouteResolver;
@@ -45,7 +44,6 @@ use Shibare\Log\Writers\StderrWriter;
     $container->bind(ResponseFactoryInterface::class, $response_factory);
     $container->bind(StreamFactoryInterface::class, new StreamFactory());
     $global_middlewares = [
-        ExceptionHandlerMiddleware::class,
         CorsMiddleware::class,
         JsonRequestResponseMiddleware::class,
     ];
