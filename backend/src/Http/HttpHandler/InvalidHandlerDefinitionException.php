@@ -7,10 +7,10 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http;
+namespace Ifb\Http\HttpHandler;
 
 use LogicException;
 
-class InvalidControllerDefinitionException extends LogicException
+final class InvalidHandlerDefinitionException extends LogicException
 {
 }

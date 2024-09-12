@@ -7,9 +7,9 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http\Controllers\Api\Auth\Register;
+namespace Ifb\Http\Handlers\Api\Auth\Register;
 
-final readonly class PostRequest
+final readonly class PostInput
 {
     public function __construct(
         public string $email,

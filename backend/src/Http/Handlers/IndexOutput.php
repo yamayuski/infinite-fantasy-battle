@@ -7,11 +7,11 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http\Controllers;
+namespace Ifb\Http\Handlers;
 
 use JsonSerializable;
 
-final readonly class IndexResponse implements JsonSerializable
+final readonly class IndexOutput implements JsonSerializable
 {
     public function __construct(public bool $ok)
     {

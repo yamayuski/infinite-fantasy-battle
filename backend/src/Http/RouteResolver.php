@@ -10,13 +10,22 @@ namespace Ifb\Http;
 
 final class RouteResolver implements RouteResolverInterface
 {
+    /** @var array<string, array<string, Route>> $routes */
+    public readonly array $routes;
+
     /**
      * Constructor
-     * @param array<string, array<string, Route>> $routes
+     * @param Route[] $route_list
      */
     public function __construct(
-        public readonly array $routes,
-    ) {}
+        array $route_list,
+    ) {
+        $routes = [];
+        foreach ($route_list as $route) {
+            $routes[$route->path][$route->method] = $route;
+        }
+        $this->routes = $routes;
+    }
 
     public function resolve(string $method, string $path): ?Route
     {
@@ -29,7 +38,7 @@ final class RouteResolver implements RouteResolverInterface
 
         // placeholder match
         foreach ($this->routes as $route_path => $routes) {
-            // placeholder match
+            // TODO: fix
             if (\array_key_exists($method, $routes)) {
                 $route = $routes[$method];
                 $result = $this->resolvePathPlaceholder($route, $route_path);

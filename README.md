@@ -2,13 +2,13 @@
 
 ## Install
 
-Add `ifb.test` and `api.ifb.test` to hosts file
+Add `127.0.0.1 ifb.test api.ifb.test` to hosts file
 
 Install mkcert
 
 ```ps1
 # in host computer
-mkcert ifb.test "*.ifb.test"
+mkcert ifb.test "*.ifb.test" -cert-file cert.pem -key-file key.pem
 ```
 
 copy pem file to `/docker/ingress/cert.pem` and `/docker/ingress/key.pem`.

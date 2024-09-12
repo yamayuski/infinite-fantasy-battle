@@ -7,9 +7,9 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http\Controllers;
+namespace Ifb\Http\Handlers;
 
-final readonly class IndexRequest
+final readonly class IndexInput
 {
     public function __construct()
     {

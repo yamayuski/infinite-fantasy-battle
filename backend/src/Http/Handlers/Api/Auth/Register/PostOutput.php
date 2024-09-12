@@ -7,11 +7,11 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http\Controllers\Api\Auth\Register;
+namespace Ifb\Http\Handlers\Api\Auth\Register;
 
 use JsonSerializable;
 
-final readonly class PostResponse implements JsonSerializable
+final readonly class PostOutput implements JsonSerializable
 {
     public function __construct(
         public string $token,

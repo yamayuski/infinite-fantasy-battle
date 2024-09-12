@@ -8,7 +8,8 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Ifb\Http\Controllers\IndexController;
+use Ifb\Http\Handlers\Api\Auth\Register\PostHandler;
+use Ifb\Http\Handlers\IndexHandler;
 use Ifb\Http\Middlewares\Cors\CorsMiddleware;
 use Ifb\Http\Middlewares\Cors\CorsSetting;
 use Ifb\Http\Middlewares\JsonRequestResponseMiddleware;
@@ -48,7 +49,8 @@ use Shibare\Log\Writers\StderrWriter;
         JsonRequestResponseMiddleware::class,
     ];
     $routes = [
-        new Route('GET', '/', IndexController::class, []),
+        new Route('GET', '/', IndexHandler::class, []),
+        new Route('POST', '/api/auth/register', PostHandler::class, []),
     ];
     $route_resolver = new RouteResolver($routes);
     $container->bind(RouteResolverInterface::class, $route_resolver);
