@@ -30,6 +30,7 @@
   },
   "minimum-stability": "dev",
   "require": {
+    "ext-mbstring": "*",
     "cakephp/chronos": "^3.1",
     "shibare/framework": "dev-main",
     "spiral/roadrunner-http": "^3.5"
@@ -44,6 +45,7 @@
     }
   },
   "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.64",
     "mockery/mockery": "^1.6",
     "phpstan/extension-installer": "^1.4",
     "phpstan/phpstan": "^1.12",

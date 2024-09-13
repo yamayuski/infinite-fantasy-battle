@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Ifb\Http\Middlewares\Cors;
 
-use Ifb\Http\RouteResolverInterface;
+use Ifb\Http\Route\RouteResolverInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -25,7 +25,7 @@ final class CorsMiddleware implements MiddlewareInterface
         private readonly ResponseFactoryInterface $response_factory,
         private readonly RequestValidator $validator,
         private readonly RouteResolverInterface $route_resolver,
-        private readonly CorsSetting $setting,
+        private readonly CorsConfig $config,
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -55,8 +55,8 @@ final class CorsMiddleware implements MiddlewareInterface
 
         // Always added
         $response = $response
-            ->withHeader('Access-Control-Allow-Origin', $this->setting->allow_origin)
-            ->withHeader('Vary', $this->setting->vary);
+            ->withHeader('Access-Control-Allow-Origin', $this->config->allow_origin)
+            ->withHeader('Vary', $this->config->vary);
 
         if (!$is_preflight_request) {
             return $response;
@@ -64,14 +64,14 @@ final class CorsMiddleware implements MiddlewareInterface
 
         // In pre-flight request
         $response = $response
-            ->withHeader('Access-Control-Allow-Methods', $this->setting->allow_methods)
-            ->withHeader('Access-Control-Allow-Headers', $this->setting->allow_headers)
-            ->withHeader('Access-Control-Max-Age', (string) $this->setting->max_age);
+            ->withHeader('Access-Control-Allow-Methods', $this->config->allow_methods)
+            ->withHeader('Access-Control-Allow-Headers', $this->config->allow_headers)
+            ->withHeader('Access-Control-Max-Age', (string) $this->config->max_age);
 
-        if (\count($this->setting->expose_headers) > 0) {
-            $response = $response->withHeader('Access-Control-Expose-Headers', $this->setting->expose_headers);
+        if (\count($this->config->expose_headers) > 0) {
+            $response = $response->withHeader('Access-Control-Expose-Headers', $this->config->expose_headers);
         }
-        if ($this->setting->allow_credentials) {
+        if ($this->config->allow_credentials) {
             $response = $response->withHeader('Access-Control-Allow-Credentials', 'true');
         }
         return $response;

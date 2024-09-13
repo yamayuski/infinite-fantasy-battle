@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class RequestValidator
 {
     public function __construct(
-        private readonly CorsSetting $setting,
+        private readonly CorsConfig $config,
     ) {}
 
     /**
@@ -72,10 +72,10 @@ class RequestValidator
      */
     private function isSameOrigin(string $origin): bool
     {
-        $server_parts = \parse_url($this->setting->server_origin);
+        $server_parts = \parse_url($this->config->server_origin);
 
         if (!\is_array($server_parts)) {
-            throw new InvalidArgumentException('Invalid server origin setting provided: ' . $this->setting->server_origin);
+            throw new InvalidArgumentException('Invalid server origin setting provided: ' . $this->config->server_origin);
         }
         $origin_parts = \parse_url($origin);
         if (!\is_array($origin_parts)) {
@@ -96,7 +96,7 @@ class RequestValidator
      */
     private function isAllowedOrigin(string $origin): bool
     {
-        foreach ($this->setting->allow_origin as $allow) {
+        foreach ($this->config->allow_origin as $allow) {
             if (0 === \strcasecmp($origin, $allow)) {
                 return true;
             }
@@ -110,7 +110,7 @@ class RequestValidator
             return false;
         }
 
-        foreach ($this->setting->allow_methods as $allow) {
+        foreach ($this->config->allow_methods as $allow) {
             if (0 === \strcasecmp($method, $allow)) {
                 return true;
             }
@@ -134,7 +134,7 @@ class RequestValidator
 
     private function isAllowedHeader(string $header): bool
     {
-        foreach ($this->setting->allow_headers as $allow) {
+        foreach ($this->config->allow_headers as $allow) {
             if (0 === \strcasecmp($header, $allow)) {
                 return true;
             }

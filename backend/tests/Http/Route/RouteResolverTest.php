@@ -6,7 +6,7 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http;
+namespace Ifb\Http\Route;
 
 use Ifb\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;

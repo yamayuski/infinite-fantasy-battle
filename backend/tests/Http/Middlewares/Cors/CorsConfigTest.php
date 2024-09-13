@@ -14,8 +14,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(CorsSetting::class)]
-final class CorsSettingTest extends TestCase
+#[CoversClass(CorsConfig::class)]
+final class CorsConfigTest extends TestCase
 {
     /**
      * @return iterable<string, mixed>
@@ -140,7 +140,7 @@ final class CorsSettingTest extends TestCase
     ): void {
         $this->expectException(InvalidArgumentException::class);
 
-        new CorsSetting(
+        new CorsConfig(
             $server_origin,
             $allow_origin,
             $allow_methods,

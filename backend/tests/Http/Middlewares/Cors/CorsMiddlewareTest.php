@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Ifb\Http\Middlewares\Cors;
 
-use Ifb\Http\Route;
-use Ifb\Http\RouteResolverInterface;
+use Ifb\Http\Route\Route;
+use Ifb\Http\Route\RouteResolverInterface;
 use Ifb\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -21,7 +21,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 #[CoversClass(CorsMiddleware::class)]
-#[UsesClass(CorsSetting::class)]
+#[UsesClass(CorsConfig::class)]
 #[UsesClass(Route::class)]
 final class CorsMiddlewareTest extends TestCase
 {
@@ -31,7 +31,7 @@ final class CorsMiddlewareTest extends TestCase
         $response_factory = self::createMockeryMock(ResponseFactoryInterface::class);
         $validator = self::createMockeryMock(RequestValidator::class);
         $route_resolver = self::createMockeryMock(RouteResolverInterface::class);
-        $setting = new CorsSetting(
+        $config = new CorsConfig(
             server_origin: 'https://api.ifb.test',
             allow_origin: ['https://ifb.test'],
             allow_methods: ['GET', 'POST'],
@@ -39,7 +39,7 @@ final class CorsMiddlewareTest extends TestCase
             expose_headers: [],
         );
 
-        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $setting);
+        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $config);
 
         $request = self::createMockeryMock(ServerRequestInterface::class);
         $request->shouldReceive('getMethod')
@@ -78,7 +78,7 @@ final class CorsMiddlewareTest extends TestCase
         $response_factory = self::createMockeryMock(ResponseFactoryInterface::class);
         $validator = self::createMockeryMock(RequestValidator::class);
         $route_resolver = self::createMockeryMock(RouteResolverInterface::class);
-        $setting = new CorsSetting(
+        $config = new CorsConfig(
             server_origin: 'https://api.ifb.test',
             allow_origin: ['https://ifb.test'],
             allow_methods: ['GET', 'POST'],
@@ -86,7 +86,7 @@ final class CorsMiddlewareTest extends TestCase
             expose_headers: [],
         );
 
-        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $setting);
+        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $config);
 
         $request = self::createMockeryMock(ServerRequestInterface::class);
         $request->shouldReceive('getMethod')
@@ -131,7 +131,7 @@ final class CorsMiddlewareTest extends TestCase
         $response_factory = self::createMockeryMock(ResponseFactoryInterface::class);
         $validator = self::createMockeryMock(RequestValidator::class);
         $route_resolver = self::createMockeryMock(RouteResolverInterface::class);
-        $setting = new CorsSetting(
+        $config = new CorsConfig(
             server_origin: 'https://api.ifb.test',
             allow_origin: ['https://ifb.test'],
             allow_methods: ['GET', 'POST'],
@@ -139,7 +139,7 @@ final class CorsMiddlewareTest extends TestCase
             expose_headers: [],
         );
 
-        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $setting);
+        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $config);
 
         $request = self::createMockeryMock(ServerRequestInterface::class);
         $request->shouldReceive('getMethod')
@@ -175,7 +175,7 @@ final class CorsMiddlewareTest extends TestCase
         $response_factory = self::createMockeryMock(ResponseFactoryInterface::class);
         $validator = self::createMockeryMock(RequestValidator::class);
         $route_resolver = self::createMockeryMock(RouteResolverInterface::class);
-        $setting = new CorsSetting(
+        $config = new CorsConfig(
             server_origin: 'https://api.ifb.test',
             allow_origin: ['https://ifb.test'],
             allow_methods: ['GET', 'POST'],
@@ -183,7 +183,7 @@ final class CorsMiddlewareTest extends TestCase
             expose_headers: [],
         );
 
-        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $setting);
+        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $config);
 
         $request = self::createMockeryMock(ServerRequestInterface::class);
         $request->shouldReceive('getMethod')
@@ -220,7 +220,7 @@ final class CorsMiddlewareTest extends TestCase
         $response_factory = self::createMockeryMock(ResponseFactoryInterface::class);
         $validator = self::createMockeryMock(RequestValidator::class);
         $route_resolver = self::createMockeryMock(RouteResolverInterface::class);
-        $setting = new CorsSetting(
+        $config = new CorsConfig(
             server_origin: 'https://api.ifb.test',
             allow_origin: ['https://ifb.test'],
             allow_methods: ['GET', 'POST'],
@@ -229,7 +229,7 @@ final class CorsMiddlewareTest extends TestCase
             allow_credentials: true,
         );
 
-        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $setting);
+        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $config);
 
         $request = self::createMockeryMock(ServerRequestInterface::class);
         $request->shouldReceive('getMethod')
@@ -312,7 +312,7 @@ final class CorsMiddlewareTest extends TestCase
         $response_factory = self::createMockeryMock(ResponseFactoryInterface::class);
         $validator = self::createMockeryMock(RequestValidator::class);
         $route_resolver = self::createMockeryMock(RouteResolverInterface::class);
-        $setting = new CorsSetting(
+        $config = new CorsConfig(
             server_origin: 'https://api.ifb.test',
             allow_origin: ['https://ifb.test'],
             allow_methods: ['GET', 'POST'],
@@ -321,7 +321,7 @@ final class CorsMiddlewareTest extends TestCase
             allow_credentials: true,
         );
 
-        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $setting);
+        $middleware = new CorsMiddleware($response_factory, $validator, $route_resolver, $config);
 
         $request = self::createMockeryMock(ServerRequestInterface::class);
         $request->shouldReceive('getMethod')

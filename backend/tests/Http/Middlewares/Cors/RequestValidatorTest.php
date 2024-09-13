@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
-#[CoversClass(CorsSetting::class)]
+#[CoversClass(CorsConfig::class)]
 #[CoversClass(RequestValidationResult::class)]
 #[CoversClass(RequestValidator::class)]
 final class RequestValidatorTest extends TestCase
@@ -22,8 +22,8 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testOriginNotFound(): void
     {
-        $setting = new CorsSetting('http://localhost', ['http://example.com']);
-        $validator = new RequestValidator($setting);
+        $config = new CorsConfig('http://localhost', ['http://example.com']);
+        $validator = new RequestValidator($config);
 
         $request = $this->createServerRequestMock(['Origin'], [[]]);
         $result = $validator->validate($request);
@@ -34,8 +34,8 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testOriginNotFoundMultipleOrigins(): void
     {
-        $setting = new CorsSetting('http://localhost', ['http://example.com']);
-        $validator = new RequestValidator($setting);
+        $config = new CorsConfig('http://localhost', ['http://example.com']);
+        $validator = new RequestValidator($config);
 
         $request = $this->createServerRequestMock(['Origin'], [['http://example.com', 'https://example.com']]);
         $result = $validator->validate($request);
@@ -46,8 +46,8 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testInvalidServerOrigin(): void
     {
-        $setting = new CorsSetting('http://// localhost', ['http://example.com']);
-        $validator = new RequestValidator($setting);
+        $config = new CorsConfig('http://// localhost', ['http://example.com']);
+        $validator = new RequestValidator($config);
 
         $request = $this->createServerRequestMock(['Origin'], [['http://example.com']]);
 
@@ -60,8 +60,8 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testInvalidOrigin(): void
     {
-        $setting = new CorsSetting('http://localhost', ['http://example.com']);
-        $validator = new RequestValidator($setting);
+        $config = new CorsConfig('http://localhost', ['http://example.com']);
+        $validator = new RequestValidator($config);
 
         $request = $this->createServerRequestMock(['Origin'], [['http://// example.com']]);
 
@@ -73,8 +73,8 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testSameOrigin(): void
     {
-        $setting = new CorsSetting('http://localhost', ['http://example.com']);
-        $validator = new RequestValidator($setting);
+        $config = new CorsConfig('http://localhost', ['http://example.com']);
+        $validator = new RequestValidator($config);
 
         $request = $this->createServerRequestMock(['Origin'], [['http://localhost']]);
 
@@ -86,8 +86,8 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testOriginNotAllowed(): void
     {
-        $setting = new CorsSetting('http://localhost', ['http://example.com']);
-        $validator = new RequestValidator($setting);
+        $config = new CorsConfig('http://localhost', ['http://example.com']);
+        $validator = new RequestValidator($config);
 
         $request = $this->createServerRequestMock(['Origin'], [['http://example.org']]);
 
@@ -99,8 +99,8 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testMethodNotFound(): void
     {
-        $setting = new CorsSetting('http://localhost', ['http://example.com'], ['GET']);
-        $validator = new RequestValidator($setting);
+        $config = new CorsConfig('http://localhost', ['http://example.com'], ['GET']);
+        $validator = new RequestValidator($config);
 
         $request = $this->createServerRequestMock(['Origin', 'Access-Control-Request-Method'], [['http://example.com'], []]);
 
@@ -112,8 +112,8 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testMethodNotAllowed(): void
     {
-        $setting = new CorsSetting('http://localhost', ['http://example.com'], ['GET']);
-        $validator = new RequestValidator($setting);
+        $config = new CorsConfig('http://localhost', ['http://example.com'], ['GET']);
+        $validator = new RequestValidator($config);
 
         $request = $this->createServerRequestMock(['Origin', 'Access-Control-Request-Method'], [['http://example.com'], ['POST']]);
 
@@ -125,8 +125,8 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testHeadersNotAllowed(): void
     {
-        $setting = new CorsSetting('http://localhost', ['http://example.com'], ['GET'], ['X-Custom-Header']);
-        $validator = new RequestValidator($setting);
+        $config = new CorsConfig('http://localhost', ['http://example.com'], ['GET'], ['X-Custom-Header']);
+        $validator = new RequestValidator($config);
 
         $request = $this->createServerRequestMock(
             ['Origin', 'Access-Control-Request-Method', 'Access-Control-Request-Headers'],
@@ -141,8 +141,8 @@ final class RequestValidatorTest extends TestCase
     #[Test]
     public function testValidCrossOrigin(): void
     {
-        $setting = new CorsSetting('http://localhost', ['http://example.com'], ['GET'], ['X-Custom-Header']);
-        $validator = new RequestValidator($setting);
+        $config = new CorsConfig('http://localhost', ['http://example.com'], ['GET'], ['X-Custom-Header']);
+        $validator = new RequestValidator($config);
 
         $request = $this->createServerRequestMock(
             ['Origin', 'Access-Control-Request-Method', 'Access-Control-Request-Headers'],

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * @author Masaru Yamagishi <akai_inu@live.jp>
+ * @author Masaru Yamagishi <m.yamagishi90+git@gmail.com>
  * @license MIT
  */
 
@@ -108,8 +108,8 @@ class InputGenerator
 
         return match (\get_class($type)) {
             ReflectionNamedType::class => $this->parseNamedType($type, $value),
-            ReflectionUnionType::class => throw new InvalidHandlerDefinitionException('Union type is not supported'),
-            ReflectionIntersectionType::class => throw new InvalidHandlerDefinitionException('Intersection type is not supported'),
+            ReflectionUnionType::class => throw new InvalidHandlerDefinitionException('Union type not supported'),
+            ReflectionIntersectionType::class => throw new InvalidHandlerDefinitionException('Intersection type not supported'),
             default => $value,
         };
     }
@@ -120,42 +120,42 @@ class InputGenerator
 
         if ($type_name === 'int') {
             if (\is_int($value) === false) {
-                throw new InputParameterValidationException('Invalid int value: ' . \gettype($value));
+                throw new InputParameterValidationException(\sprintf('Invalid int value: %s', \gettype($value)));
             }
             return (int) $value;
         }
 
         if ($type_name === 'float') {
             if (\is_float($value) === false) {
-                throw new InputParameterValidationException('Invalid float value: ' . \gettype($value));
+                throw new InputParameterValidationException(\sprintf('Invalid float value: %s', \gettype($value)));
             }
             return (float) $value;
         }
 
         if ($type_name === 'bool') {
             if (\is_bool($value) === false) {
-                throw new InputParameterValidationException('Invalid bool value: ' . \gettype($value));
+                throw new InputParameterValidationException(\sprintf('Invalid bool value: %s', \gettype($value)));
             }
             return (bool) $value;
         }
 
         if ($type_name === 'string') {
             if (\is_string($value) === false) {
-                throw new InputParameterValidationException('Invalid string value: ' . \gettype($value));
+                throw new InputParameterValidationException(\sprintf('Invalid string value: %s', \gettype($value)));
             }
             return (string) $value;
         }
 
         if ($type_name === 'array') {
             if (\is_array($value) === false) {
-                throw new InputParameterValidationException('Invalid array value: ' . \gettype($value));
+                throw new InputParameterValidationException(\sprintf('Invalid array value: %s', \gettype($value)));
             }
             return (array) $value;
         }
 
         if ($type_name === 'object') {
             if (\is_object($value) === false) {
-                throw new InputParameterValidationException('Invalid object value: ' . \gettype($value));
+                throw new InputParameterValidationException(\sprintf('Invalid object value: %s', \gettype($value)));
             }
             return (object) $value;
         }

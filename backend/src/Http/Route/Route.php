@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 /**
- * @author Masaru Yamagishi <akai_inu@live.jp>
+ * @author Masaru Yamagishi <m.yamagishi90+git@gmail.com>
  * @license MIT
  */
 
-namespace Ifb\Http;
+namespace Ifb\Http\Route;
 
 use JsonSerializable;
 

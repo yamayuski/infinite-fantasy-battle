@@ -11,9 +11,9 @@ namespace Ifb\Http\Middlewares\Cors;
 use InvalidArgumentException;
 
 /**
- * @package Ifb\Http\Cors
+ * @package Ifb\Http\Middlewares\Cors
  */
-final class CorsSetting
+final class CorsConfig
 {
     /**
      * Constructor
