@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http\Handlers;
+namespace Ifb\Handlers;
 
 final readonly class IndexHandler
 {

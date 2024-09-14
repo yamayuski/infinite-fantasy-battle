@@ -22,6 +22,8 @@ services:
       context: backend
     volumes:
       - ./backend:/src
+    env_file:
+      - backend/.env
     ports:
       - 8080
       - 6001

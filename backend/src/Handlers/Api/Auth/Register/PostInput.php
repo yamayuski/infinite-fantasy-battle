@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http\Handlers\Api\Auth\Register;
+namespace Ifb\Handlers\Api\Auth\Register;
 
 final readonly class PostInput
 {

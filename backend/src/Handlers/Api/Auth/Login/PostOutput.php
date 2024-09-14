@@ -7,20 +7,20 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http\Handlers\Api\Auth\Register;
+namespace Ifb\Handlers\Api\Auth\Login;
 
 use JsonSerializable;
 
 final readonly class PostOutput implements JsonSerializable
 {
     public function __construct(
-        public string $token,
+        public string $new_token,
     ) {}
 
     public function jsonSerialize(): mixed
     {
         return [
-            'token' => $this->token,
+            'token' => $this->new_token,
         ];
     }
 }

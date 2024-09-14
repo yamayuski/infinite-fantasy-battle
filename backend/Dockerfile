@@ -10,7 +10,7 @@ FROM mlocati/php-extension-installer:${EXTENSION_INSTALLER_VERSION} AS ext
 FROM php:${PHP_VERSION}
 
 COPY --from=ext /usr/bin/install-php-extensions /usr/local/bin/install-php-extensions
-RUN install-php-extensions opcache pdo_mysql protobuf gettext intl redis zip sockets yaml @composer-2
+RUN install-php-extensions opcache pdo_sqlite protobuf gettext intl redis zip sockets yaml @composer-2
 
 COPY --from=rr /usr/bin/rr /usr/local/bin/rr
 

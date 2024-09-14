@@ -7,18 +7,20 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Ifb\Http\Handlers;
+namespace Ifb\Handlers\Api\Auth\Register;
 
 use JsonSerializable;
 
-final readonly class IndexOutput implements JsonSerializable
+final readonly class PostOutput implements JsonSerializable
 {
-    public function __construct(public bool $ok) {}
+    public function __construct(
+        public string $token,
+    ) {}
 
     public function jsonSerialize(): mixed
     {
         return [
-            'ok' => $this->ok,
+            'token' => $this->token,
         ];
     }
 }
