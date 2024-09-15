@@ -756,12 +756,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/shibare-framework/framework.git",
-                "reference": "0475c63e3eed0638f58304e7f02b07da402268f5"
+                "reference": "8da67461ae1eeebcbfb837059d55f057d04b8a78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shibare-framework/framework/zipball/0475c63e3eed0638f58304e7f02b07da402268f5",
-                "reference": "0475c63e3eed0638f58304e7f02b07da402268f5",
+                "url": "https://api.github.com/repos/shibare-framework/framework/zipball/8da67461ae1eeebcbfb837059d55f057d04b8a78",
+                "reference": "8da67461ae1eeebcbfb837059d55f057d04b8a78",
                 "shasum": ""
             },
             "require": {
@@ -811,8 +811,12 @@
             "require-dev": {
                 "cakephp/chronos": "^3.0.0",
                 "ext-pdo_mysql": "*",
+                "mockery/mockery": "^1.6",
                 "monolog/monolog": "^3.7.0",
                 "nesbot/carbon": "^3.0.0",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^1.12",
+                "phpstan/phpstan-mockery": "^1.1",
                 "phpunit/phpunit": "^11.2.9",
                 "spiral/roadrunner-http": "^3.5.0"
             },
@@ -857,7 +861,7 @@
                 "issues": "https://github.com/shibare-framework/framework/issues",
                 "source": "https://github.com/shibare-framework/framework/"
             },
-            "time": "2024-09-07T03:10:44+00:00"
+            "time": "2024-09-15T04:10:42+00:00"
         },
         {
             "name": "spiral/goridge",

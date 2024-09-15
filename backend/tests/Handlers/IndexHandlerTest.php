@@ -22,7 +22,7 @@ final class IndexHandlerTest extends TestCase
     {
         $input = new IndexInput();
         $handler = new IndexHandler();
-        $output = $handler->__invoke($input);
+        $output = $handler($input);
 
         self::assertHandler(['ok' => true], $output);
     }
