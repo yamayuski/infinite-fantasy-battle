@@ -8,22 +8,17 @@ declare(strict_types=1);
 
 namespace Ifb\Handlers;
 
-use Ifb\TestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
+use Ifb\HandlerTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-#[CoversClass(IndexHandler::class)]
-#[CoversClass(IndexInput::class)]
-#[CoversClass(IndexOutput::class)]
-final class IndexHandlerTest extends TestCase
+final class IndexHandlerTest extends HandlerTestCase
 {
     #[Test]
     public function testInvoke(): void
     {
-        $input = new IndexInput();
-        $handler = new IndexHandler();
-        $output = $handler($input);
+        $output = $this->handle(new IndexInput(), IndexHandler::class);
 
-        self::assertHandler(['ok' => true], $output);
+        self::assertInstanceOf(IndexOutput::class, $output);
+        self::assertTrue($output->ok);
     }
 }

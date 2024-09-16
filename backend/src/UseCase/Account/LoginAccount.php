@@ -39,6 +39,7 @@ final readonly class LoginAccount
                 $account = $repo->forUpdate()->select()->where('email', $email)->fetchOne();
                 \assert(\is_null($account) || $account instanceof AccountEntity);
                 if (\is_null($account) || !$account->verifyPassword($token->token)) {
+                    $this->logger->debug('not found', compact('email', 'account', 'token'));
                     throw new AccountNotFoundException($email);
                 }
 

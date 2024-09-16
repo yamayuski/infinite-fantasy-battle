@@ -11,10 +11,12 @@ namespace Ifb\Domain\Account;
 
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
+use Cycle\Annotated\Annotation\Table\Index;
 use Ifb\Domain\Identity\Identity;
 use SensitiveParameter;
 
 #[Entity(role: 'account', table: 'accounts')]
+#[Index(['email'], unique: true)]
 class AccountEntity
 {
     /**

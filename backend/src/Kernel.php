@@ -10,12 +10,15 @@ declare(strict_types=1);
 namespace Ifb;
 
 use Ifb\Infrastructure\Config\ConfigInterface;
+use Ifb\Infrastructure\ProviderInterface;
 use Ifb\Providers\DatabaseProvider;
 use Ifb\Providers\HttpProvider;
 use Ifb\Providers\LoggerProvider;
 use LogicException;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use ReflectionClass;
+use RuntimeException;
 use Shibare\Container\Container;
 use Shibare\HttpServer\HttpHandler\MiddlewaresHandler;
 use Shibare\HttpServer\RoadRunnerHttpDispatcher;
@@ -33,9 +36,15 @@ class Kernel
     {
         $container = new Container();
         $container->bind(ContainerInterface::class, $container);
-        (new LoggerProvider())->provide($container, $this->config);
-        (new DatabaseProvider())->provide($container, $this->config);
-        (new HttpProvider())->provide($container, $this->config);
+        $providers = $this->config->getNonEmptyStringArray('providers');
+        /** @var class-string $provider */
+        foreach ($providers as $provider) {
+            $class = $container->get($provider);
+            if ($class instanceof ProviderInterface === false) {
+                throw new RuntimeException(\sprintf('"%s" is not ProviderInterface', $provider));
+            }
+            $class->provide($container, $this->config);
+        }
         $this->container = $container;
     }
 

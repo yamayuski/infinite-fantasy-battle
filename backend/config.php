@@ -7,6 +7,13 @@ declare(strict_types=1);
  */
 
 return [
+    'providers' => [
+        Ifb\Providers\LoggerProvider::class,
+        Ifb\Providers\HttpProvider::class,
+        Ifb\Providers\DatabaseProvider::class,
+    ],
+    'logger.writer' => \getenv('LOGGER_WRITER') ?? 'stderr',
+    'logger.formatter' => 'jsonline',
     'databases.default' => 'default',
     'databases.databases' => [
         'default' => [
