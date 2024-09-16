@@ -33,6 +33,9 @@
     "ext-mbstring": "*",
     "ext-pdo_sqlite": "*",
     "cakephp/chronos": "^3.1",
+    "cycle/annotated": "^4.2",
+    "cycle/orm": "^2.9",
+    "ramsey/uuid": "^4.7",
     "shibare/framework": "dev-main",
     "spiral/roadrunner-http": "^3.5"
   },

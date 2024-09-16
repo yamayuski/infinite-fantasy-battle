@@ -9,37 +9,54 @@ declare(strict_types=1);
 
 namespace Ifb\UseCase\Account;
 
+use Cycle\ORM\EntityManager;
+use Cycle\ORM\ORMInterface;
+use Cycle\ORM\Select\Repository;
 use Ifb\Domain\Account\AccountAlreadyExistsException;
-use Ifb\Domain\Account\AccountRepositoryInterface;
+use Ifb\Domain\Account\AccountEntity;
 use Ifb\Domain\Account\RawLoginToken;
-use Ifb\Domain\Database\TransactionInterface;
+use Ifb\Domain\Identity\Identity;
 use Psr\Log\LoggerInterface;
 
 final readonly class RegisterAccount
 {
     /**
-     * @param TransactionInterface<RawLoginToken> $tx
      * @param LoggerInterface $logger
-     * @param AccountRepositoryInterface $repo
+     * @param ORMInterface $orm
      */
     public function __construct(
-        private TransactionInterface $tx,
         private LoggerInterface $logger,
-        private AccountRepositoryInterface $repo,
+        private ORMInterface $orm,
     ) {}
 
     public function __invoke(string $email): RawLoginToken
     {
-        return ($this->tx)(function () use ($email): RawLoginToken {
-            if ($this->repo->exists($email)) {
-                throw new AccountAlreadyExistsException($email);
-            }
-            $token = RawLoginToken::generateNew();
-            $account = $this->repo->insert($email, $token);
+        return $this->orm
+            ->getSource(AccountEntity::class)
+            ->getDatabase()
+            ->transaction(function () use ($email): RawLoginToken {
+                // @phpstan-ignore argument.templateType
+                $repo = $this->orm->getRepository(AccountEntity::class);
+                \assert($repo instanceof Repository);
+                $result = $repo->select()->where('email', $email)->fetchOne();
+                if (!\is_null($result)) {
+                    throw new AccountAlreadyExistsException($email);
+                }
+                $token = RawLoginToken::generateNew();
+                /** @var Identity<AccountEntity> $id */
+                $id = Identity::create();
+                $account = new AccountEntity(
+                    $id,
+                    $email,
+                    $token->getHash(),
+                );
+                $em = new EntityManager($this->orm);
+                $em->persist($account);
+                $em->run();
 
-            $this->logger->info('New user registered', compact('email'));
+                $this->logger->info('New user has registered', compact('email'));
 
-            return $token;
-        });
+                return $token;
+            });
     }
 }

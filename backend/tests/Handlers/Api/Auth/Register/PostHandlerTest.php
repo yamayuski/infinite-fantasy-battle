@@ -8,16 +8,32 @@ declare(strict_types=1);
 
 namespace Ifb\Handlers\Api\Auth\Register;
 
+use Ifb\Infrastructure\Config\ArrayConfig;
+use Ifb\Kernel;
 use Ifb\TestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
+use JsonSerializable;
+use LogicException;
 
-#[CoversClass(PostHandler::class)]
-#[CoversClass(PostInput::class)]
-#[CoversClass(PostOutput::class)]
 final class PostHandlerTest extends TestCase
 {
     public function testInvoke(): void
     {
-        $this->markTestIncomplete();
+        $array = require_once __DIR__ . '/../../../../../config.php';
+        if (!\is_array($array)) {
+            throw new LogicException('Invalid config.php');
+        }
+        $config = new ArrayConfig($array);
+        $kernel = new Kernel($config);
+        $kernel->boot();
+        $container = $kernel->getContainer();
+        if (\is_null($container)) {
+            throw new LogicException('Container not set');
+        }
+        $handler = $container->get(PostHandler::class);
+        \assert($handler instanceof PostHandler);
+
+        $output = $handler(new PostInput('test@example.com'));
+
+        self::assertInstanceOf(JsonSerializable::class, $output);
     }
 }
