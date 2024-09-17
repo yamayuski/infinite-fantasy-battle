@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.AsyncIterable"],
+    "isolatedModules": true,
+    "useDefineForClassFields": true,
+    "types": ["vite/client"],
+    "module": "ESNext"
+  }
+}
