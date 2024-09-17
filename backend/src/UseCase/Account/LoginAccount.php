@@ -14,7 +14,8 @@ use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Select\Repository;
 use Ifb\Domain\Account\AccountEntity;
 use Ifb\Domain\Account\AccountNotFoundException;
-use Ifb\Domain\Account\RawLoginToken;
+use Ifb\Domain\Account\LoginToken;
+use Ifb\Domain\Account\RawPassword;
 use Psr\Log\LoggerInterface;
 
 final readonly class LoginAccount
@@ -27,12 +28,12 @@ final readonly class LoginAccount
         private ORMInterface $orm,
     ) {}
 
-    public function __invoke(string $email, RawLoginToken $token): RawLoginToken
+    public function __invoke(string $email, RawPassword $token): LoginToken
     {
         return $this->orm
             ->getSource(AccountEntity::class)
             ->getDatabase()
-            ->transaction(function () use ($email, $token): RawLoginToken {
+            ->transaction(function () use ($email, $token): LoginToken {
                 // @phpstan-ignore argument.templateType
                 $repo = $this->orm->getRepository(AccountEntity::class);
                 \assert($repo instanceof Repository);
@@ -46,16 +47,18 @@ final readonly class LoginAccount
                 $this->logger->info('User logged in', compact('email'));
 
                 if ($token->needsRehash($account)) {
-                    $new_token = RawLoginToken::generateNew();
-                    $account->updatePassword($new_token);
-                    $em = new EntityManager($this->orm);
-                    $em->persist($account);
-                    $em->run();
-
-                    $this->logger->info('User rehashed', compact('email'));
-                    return $new_token;
+                    $account->updatePassword($token);
+                    $this->logger->info('User password rehashed', compact('email'));
                 }
-                return $token;
+
+                $login_token = LoginToken::generateNew();
+                $account->updateToken($login_token);
+
+                $em = new EntityManager($this->orm);
+                $em->persist($account);
+                $em->run();
+
+                return $login_token;
             });
     }
 }

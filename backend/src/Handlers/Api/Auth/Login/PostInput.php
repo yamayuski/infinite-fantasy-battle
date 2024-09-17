@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace Ifb\Handlers\Api\Auth\Login;
 
-use Ifb\Domain\Account\RawLoginToken;
+use Ifb\Domain\Account\RawPassword;
 use SensitiveParameter;
 
 final readonly class PostInput
 {
-    public RawLoginToken $token;
+    public RawPassword $token;
 
     public function __construct(
         #[SensitiveParameter]
@@ -22,6 +22,6 @@ final readonly class PostInput
         #[SensitiveParameter]
         string $token,
     ) {
-        $this->token = new RawLoginToken($token);
+        $this->token = new RawPassword($token);
     }
 }

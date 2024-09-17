@@ -14,7 +14,7 @@ use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Select\Repository;
 use Ifb\Domain\Account\AccountAlreadyExistsException;
 use Ifb\Domain\Account\AccountEntity;
-use Ifb\Domain\Account\RawLoginToken;
+use Ifb\Domain\Account\RawPassword;
 use Ifb\Domain\Identity\Identity;
 use Psr\Log\LoggerInterface;
 
@@ -29,12 +29,12 @@ final readonly class RegisterAccount
         private ORMInterface $orm,
     ) {}
 
-    public function __invoke(string $email): RawLoginToken
+    public function __invoke(string $email): RawPassword
     {
         return $this->orm
             ->getSource(AccountEntity::class)
             ->getDatabase()
-            ->transaction(function () use ($email): RawLoginToken {
+            ->transaction(function () use ($email): RawPassword {
                 // @phpstan-ignore argument.templateType
                 $repo = $this->orm->getRepository(AccountEntity::class);
                 \assert($repo instanceof Repository);
@@ -42,7 +42,7 @@ final readonly class RegisterAccount
                 if (!\is_null($result)) {
                     throw new AccountAlreadyExistsException($email);
                 }
-                $token = RawLoginToken::generateNew();
+                $token = RawPassword::generateNew();
                 /** @var Identity<AccountEntity> $id */
                 $id = Identity::create();
                 $account = new AccountEntity(

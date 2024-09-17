@@ -31,6 +31,7 @@ return [
         ['method' => 'GET', 'path' => '/', 'handler' => \Ifb\Handlers\IndexHandler::class, 'middlewares' => []],
         ['method' => 'POST', 'path' => '/api/auth/register', 'handler' => \Ifb\Handlers\Api\Auth\Register\PostHandler::class, 'middlewares' => []],
         ['method' => 'POST', 'path' => '/api/auth/login', 'handler' => \Ifb\Handlers\Api\Auth\Login\PostHandler::class, 'middlewares' => []],
+        ['method' => 'GET', 'path' => '/api/auth/me', 'handler' => \Ifb\Handlers\Api\Auth\Me\GetHandler::class, 'middlewares' => [\Ifb\Http\Middlewares\AuthenticateMiddleware::class]],
     ],
     'http.middlewares' => [
         \Shibare\HttpServer\Middlewares\Cors\CorsMiddleware::class,

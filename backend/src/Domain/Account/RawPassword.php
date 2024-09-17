@@ -12,7 +12,7 @@ namespace Ifb\Domain\Account;
 use RuntimeException;
 use SensitiveParameter;
 
-final readonly class RawLoginToken
+final readonly class RawPassword
 {
     public function __construct(
         #[SensitiveParameter]
