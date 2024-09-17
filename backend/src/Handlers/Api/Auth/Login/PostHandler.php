@@ -19,7 +19,7 @@ final readonly class PostHandler
 
     public function __invoke(PostInput $input): PostOutput
     {
-        $new_token = ($this->usecase)($input->email, $input->token);
+        $new_token = ($this->usecase)($input->email, $input->password);
         return new PostOutput($new_token->token);
     }
 }

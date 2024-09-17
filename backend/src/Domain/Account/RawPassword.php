@@ -16,7 +16,7 @@ final readonly class RawPassword
 {
     public function __construct(
         #[SensitiveParameter]
-        public string $token,
+        public string $password,
     ) {}
 
     public static function generateNew(int $length = 32): self
@@ -33,7 +33,7 @@ final readonly class RawPassword
 
     public function getHash(): string
     {
-        return \password_hash($this->token, \PASSWORD_DEFAULT);
+        return \password_hash($this->password, \PASSWORD_DEFAULT);
     }
 
     public function needsRehash(AccountEntity $entity): bool

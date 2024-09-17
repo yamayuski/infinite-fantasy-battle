@@ -14,14 +14,14 @@ use SensitiveParameter;
 
 final readonly class PostInput
 {
-    public RawPassword $token;
+    public RawPassword $password;
 
     public function __construct(
         #[SensitiveParameter]
         public string $email,
         #[SensitiveParameter]
-        string $token,
+        string $password,
     ) {
-        $this->token = new RawPassword($token);
+        $this->password = new RawPassword($password);
     }
 }

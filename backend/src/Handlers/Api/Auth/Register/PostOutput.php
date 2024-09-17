@@ -14,13 +14,13 @@ use JsonSerializable;
 final readonly class PostOutput implements JsonSerializable
 {
     public function __construct(
-        public string $token,
+        public string $password,
     ) {}
 
     public function jsonSerialize(): mixed
     {
         return [
-            'token' => $this->token,
+            'password' => $this->password,
         ];
     }
 }

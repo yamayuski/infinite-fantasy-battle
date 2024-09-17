@@ -21,6 +21,8 @@ final class PostHandlerTest extends HandlerTestCase
         $output = $this->handle(new PostInput('test@example.com'), PostHandler::class);
 
         self::assertInstanceOf(JsonSerializable::class, $output);
+        self::assertInstanceOf(PostOutput::class, $output);
+        self::assertNotEmpty($output->password);
     }
 
     #[Test]

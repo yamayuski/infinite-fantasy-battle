@@ -9,19 +9,10 @@ declare(strict_types=1);
 
 namespace Ifb\Handlers\Api\Auth\Me;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Shibare\Contracts\HttpServer\ServerRequestAwareInterface;
+use Shibare\HttpServer\HttpHandler\ServerRequestAwareTrait;
 
-final class GetInput
+final class GetInput implements ServerRequestAwareInterface
 {
-    private ?ServerRequestInterface $serverRequest = null;
-
-    public function setServerRequest(ServerRequestInterface $serverRequest): void
-    {
-        $this->serverRequest = $serverRequest;
-    }
-
-    public function getServerRequest(): ?ServerRequestInterface
-    {
-        return $this->serverRequest;
-    }
+    use ServerRequestAwareTrait;
 }

@@ -76,10 +76,98 @@ paths:
               schema:
                 type: object
                 properties:
+                  password:
+                    $ref: "#/components/schemas/Password"
+                required:
+                  -  password
+        '4XX':
+          $ref: "#/components/responses/InvalidRequestResponse"
+  /api/auth/login:
+    post:
+      operationId: LoginAuth
+      summary: Login as user
+      tags:
+        -  Authentication
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/AcceptJson"
+        - $ref: "#/components/parameters/ContentTypeJson"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "john.doe@example.com"
+                password:
+                  $ref: "#/components/schemas/Password"
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Ok
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              required: true
+              example: application/json; charset=UTF-8
+            Content-Length:
+              schema:
+                type: integer
+              required: true
+              example: 100
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
                   token:
                     $ref: "#/components/schemas/LoginToken"
                 required:
                   -  token
+        '4XX':
+          $ref: "#/components/responses/InvalidRequestResponse"
+  /api/auth/me:
+    get:
+      operationId: MeAuth
+      summary: Get my information
+      tags:
+        -  Authentication
+      security:
+        - apiKey: []
+      parameters:
+        - $ref: "#/components/parameters/AcceptJson"
+        - $ref: "#/components/parameters/ContentTypeJson"
+      responses:
+        '200':
+          description: Ok
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              required: true
+              example: application/json; charset=UTF-8
+            Content-Length:
+              schema:
+                type: integer
+              required: true
+              example: 100
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    example: "john.doe@example.com"
+                required:
+                  -  email
         '4XX':
           $ref: "#/components/responses/InvalidRequestResponse"
 
@@ -129,6 +217,9 @@ components:
               - ok
               - messages
   schemas:
+    Password:
+      type: string
+      example: exampleRawPassword
     LoginToken:
       type: string
       example: exampleToken
