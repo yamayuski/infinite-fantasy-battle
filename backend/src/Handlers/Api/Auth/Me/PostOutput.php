@@ -11,7 +11,7 @@ namespace Ifb\Handlers\Api\Auth\Me;
 
 use JsonSerializable;
 
-final readonly class GetOutput implements JsonSerializable
+final readonly class PostOutput implements JsonSerializable
 {
     public function __construct(
         public string $email,

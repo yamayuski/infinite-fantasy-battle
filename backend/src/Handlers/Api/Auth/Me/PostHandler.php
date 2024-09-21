@@ -10,13 +10,14 @@ declare(strict_types=1);
 namespace Ifb\Handlers\Api\Auth\Me;
 
 use Ifb\Domain\Account\AccountEntity;
+use Shibare\Log\Logger;
 
-final readonly class GetHandler
+final readonly class PostHandler
 {
     public function __construct(
     ) {}
 
-    public function __invoke(GetInput $input): GetOutput
+    public function __invoke(PostInput $input): PostOutput
     {
         $request = $input->getServerRequest();
         if (\is_null($request)) {
@@ -26,6 +27,7 @@ final readonly class GetHandler
         if (\is_null($account) || !$account instanceof AccountEntity) {
             throw new \RuntimeException('Account is not set');
         }
-        return new GetOutput($account->email);
+        Logger::getInstance()->info('account', compact('account'));
+        return new PostOutput($account->email);
     }
 }

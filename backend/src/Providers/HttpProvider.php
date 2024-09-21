@@ -17,7 +17,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use RuntimeException;
-use Shibare\Contracts\Container;
+use Shibare\Contracts\ContainerInterface;
 use Shibare\Contracts\HttpServer\RouteResolverInterface;
 use Shibare\HttpFactory\RequestFactory;
 use Shibare\HttpFactory\ResponseFactory;
@@ -31,7 +31,7 @@ use Shibare\HttpServer\Route\RouteResolver;
 
 class HttpProvider implements ProviderInterface
 {
-    public function provide(Container $container, ConfigInterface $config): void
+    public function provide(ContainerInterface $container, ConfigInterface $config): void
     {
         $container->bind(RequestFactoryInterface::class, RequestFactory::class);
         $container->bind(ResponseFactoryInterface::class, ResponseFactory::class);

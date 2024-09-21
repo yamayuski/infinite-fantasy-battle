@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace Ifb\Infrastructure;
 
 use Ifb\Infrastructure\Config\ConfigInterface;
-use Shibare\Contracts\Container;
+use Shibare\Contracts\ContainerInterface;
 
 interface ProviderInterface
 {
-    public function provide(Container $container, ConfigInterface $config): void;
+    public function provide(ContainerInterface $container, ConfigInterface $config): void;
 }

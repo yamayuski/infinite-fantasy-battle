@@ -3,3 +3,4 @@ vendor/
 coverage/
 .php-cs-fixer.cache
 .env
+*.sqlite3

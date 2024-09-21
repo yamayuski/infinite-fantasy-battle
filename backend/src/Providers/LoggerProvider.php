@@ -14,7 +14,7 @@ use Ifb\Infrastructure\Config\InvalidConfigException;
 use Ifb\Infrastructure\Logger\NullWriter;
 use Ifb\Infrastructure\ProviderInterface;
 use Psr\Log\LoggerInterface;
-use Shibare\Contracts\Container;
+use Shibare\Contracts\ContainerInterface;
 use Shibare\Log\Formatters\JsonLineFormatter;
 use Shibare\Log\Logger;
 use Shibare\Log\Writers\StderrWriter;
@@ -22,7 +22,7 @@ use Shibare\Log\Writers\StdoutWriter;
 
 class LoggerProvider implements ProviderInterface
 {
-    public function provide(Container $container, ConfigInterface $config): void
+    public function provide(ContainerInterface $container, ConfigInterface $config): void
     {
         $formatter = match ($config->getNonEmptyString('logger.formatter')) {
             'jsonline' => new JsonLineFormatter(),

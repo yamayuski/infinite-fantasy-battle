@@ -11,13 +11,9 @@ namespace Ifb;
 
 use Ifb\Infrastructure\Config\ConfigInterface;
 use Ifb\Infrastructure\ProviderInterface;
-use Ifb\Providers\DatabaseProvider;
-use Ifb\Providers\HttpProvider;
-use Ifb\Providers\LoggerProvider;
 use LogicException;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use ReflectionClass;
 use RuntimeException;
 use Shibare\Container\Container;
 use Shibare\HttpServer\HttpHandler\MiddlewaresHandler;

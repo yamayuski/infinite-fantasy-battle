@@ -23,7 +23,8 @@ return [
     'databases.connections' => [
         'sqlite' => [
             'driver' => 'sqlite',
-            'connection' => 'memory',
+            'connection' => \getenv('SQLITE_CONNECTION') ?? 'memory',
+            'database' => \getenv('SQLITE_DATABASE') ?? '',
             'timezone' => 'Asia/Tokyo',
         ],
     ],
@@ -31,13 +32,13 @@ return [
         ['method' => 'GET', 'path' => '/', 'handler' => \Ifb\Handlers\IndexHandler::class, 'middlewares' => []],
         ['method' => 'POST', 'path' => '/api/auth/register', 'handler' => \Ifb\Handlers\Api\Auth\Register\PostHandler::class, 'middlewares' => []],
         ['method' => 'POST', 'path' => '/api/auth/login', 'handler' => \Ifb\Handlers\Api\Auth\Login\PostHandler::class, 'middlewares' => []],
-        ['method' => 'GET', 'path' => '/api/auth/me', 'handler' => \Ifb\Handlers\Api\Auth\Me\GetHandler::class, 'middlewares' => [\Ifb\Http\Middlewares\AuthenticateMiddleware::class]],
+        ['method' => 'POST', 'path' => '/api/auth/me', 'handler' => \Ifb\Handlers\Api\Auth\Me\PostHandler::class, 'middlewares' => [\Ifb\Http\Middlewares\AuthenticateMiddleware::class]],
     ],
     'http.middlewares' => [
         \Shibare\HttpServer\Middlewares\Cors\CorsMiddleware::class,
         \Shibare\HttpServer\Middlewares\JsonRequestResponseMiddleware::class,
     ],
-    'http.cors.server_origin' => 'https://api.ifb.test',
+    'http.cors.server_origin' => 'https://ifb.test',
     'http.cors.allow_origin' => ['https://ifb.test'],
     'http.cors.allow_methods' => ['GET', 'POST'],
     'http.cors.allow_headers' => ['Content-Type', 'Accept'],

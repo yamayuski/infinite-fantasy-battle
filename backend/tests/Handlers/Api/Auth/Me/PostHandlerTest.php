@@ -12,16 +12,16 @@ use Ifb\HandlerTestCase;
 use JsonSerializable;
 use PHPUnit\Framework\Attributes\Test;
 
-final class GetHandlerTest extends HandlerTestCase
+final class PostHandlerTest extends HandlerTestCase
 {
     #[Test]
     public function testInvoke(): void
     {
-        $input = new GetInput();
+        $input = new PostInput();
 
         $account = $this->actAsUser($input);
 
-        $output = $this->handle($input, GetHandler::class);
+        $output = $this->handle($input, PostHandler::class);
 
         self::assertInstanceOf(JsonSerializable::class, $output);
         self::assertSame(\sprintf('{"email":"%s"}', $account->email), \json_encode($output));

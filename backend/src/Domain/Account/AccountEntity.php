@@ -13,12 +13,13 @@ use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Table\Index;
 use Ifb\Domain\Identity\Identity;
+use JsonSerializable;
 use SensitiveParameter;
 
 #[Entity(role: 'account', table: 'accounts')]
 #[Index(['email'], unique: true)]
 #[Index(['token'], unique: true)]
-class AccountEntity
+class AccountEntity implements JsonSerializable
 {
     /**
      * @param Identity<AccountEntity> $id
@@ -28,9 +29,9 @@ class AccountEntity
      */
     public function __construct(
         #[Column(type: 'string', primary: true, typecast: [Identity::class, 'castValue'])]
-        public readonly Identity $id,
+        private Identity $id,
         #[Column(type: 'string')]
-        public readonly string $email,
+        public string $email,
         #[Column(type: 'string')]
         #[SensitiveParameter]
         private string $hashed_password,
@@ -63,5 +64,13 @@ class AccountEntity
     public function getToken(): ?LoginToken
     {
         return $this->token;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+        ];
     }
 }

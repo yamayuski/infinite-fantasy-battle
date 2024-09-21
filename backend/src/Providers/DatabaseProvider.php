@@ -26,13 +26,13 @@ use Ifb\Infrastructure\Config\ConfigNotFoundException;
 use Ifb\Infrastructure\Config\InvalidConfigException;
 use Ifb\Infrastructure\ProviderInterface;
 use Psr\Log\LoggerInterface;
-use Shibare\Contracts\Container;
+use Shibare\Contracts\ContainerInterface;
 use Spiral\Tokenizer\ClassLocator;
 use Symfony\Component\Finder\Finder;
 
 class DatabaseProvider implements ProviderInterface
 {
-    public function provide(Container $container, ConfigInterface $config): void
+    public function provide(ContainerInterface $container, ConfigInterface $config): void
     {
         $dbal = new DatabaseManager(
             new DatabaseConfig([
@@ -41,7 +41,7 @@ class DatabaseProvider implements ProviderInterface
                 'connections' => $this->buildConnections($config),
             ]),
         );
-        $dbal->setLogger($container->get(LoggerInterface::class));
+        $dbal->setLogger($container->getClass(LoggerInterface::class));
         $container->bind(DatabaseManager::class, $dbal);
         $entity_locator = new TokenizerEntityLocator(new ClassLocator((new Finder())->files()->in(__DIR__ . '/../')));
         $schema = (new Compiler())->compile(

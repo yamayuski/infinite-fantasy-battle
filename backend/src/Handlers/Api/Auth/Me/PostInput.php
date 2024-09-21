@@ -12,7 +12,7 @@ namespace Ifb\Handlers\Api\Auth\Me;
 use Shibare\Contracts\HttpServer\ServerRequestAwareInterface;
 use Shibare\HttpServer\HttpHandler\ServerRequestAwareTrait;
 
-final class GetInput implements ServerRequestAwareInterface
+final class PostInput implements ServerRequestAwareInterface
 {
     use ServerRequestAwareTrait;
 }

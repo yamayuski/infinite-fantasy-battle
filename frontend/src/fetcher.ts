@@ -66,5 +66,5 @@ export type MeAuthResponse = {
 };
 
 export async function meAuth(): Promise<MeAuthResponse> {
-  return executeFetch<MeAuthRequest, MeAuthResponse>('GET', '/api/auth/me', {});
+  return executeFetch<MeAuthRequest, MeAuthResponse>('POST', '/api/auth/me', {});
 }
