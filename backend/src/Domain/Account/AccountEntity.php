@@ -39,6 +39,15 @@ class AccountEntity implements JsonSerializable
         private ?LoginToken $token = null,
     ) {}
 
+    /**
+     * Get ID
+     * @return Identity<AccountEntity>
+     */
+    public function getId(): Identity
+    {
+        return $this->id;
+    }
+
     public function verifyPassword(
         #[SensitiveParameter]
         string $password,

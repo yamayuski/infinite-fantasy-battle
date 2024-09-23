@@ -19,6 +19,7 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
+use Shibare\Contracts\HttpServer\ServerRequestAwareInterface;
 use Shibare\Log\Logger;
 
 abstract class HandlerTestCase extends BaseTestCase
@@ -46,8 +47,8 @@ abstract class HandlerTestCase extends BaseTestCase
      */
     public function actAsUser(object $input, ?AccountEntity $entity = null): AccountEntity
     {
-        if (!\method_exists($input, 'setServerRequest')) {
-            throw new LogicException('Input does not have setServerRequest method');
+        if ($input instanceof ServerRequestAwareInterface === false) {
+            throw new LogicException('Input class does not implements ServerRequestAwareInterface');
         }
         if (\is_null($entity)) {
             /** @var Identity<AccountEntity> $id */
@@ -68,7 +69,7 @@ abstract class HandlerTestCase extends BaseTestCase
         $input->setServerRequest($request);
 
         $this->seed('accounts', [
-            'id' => $entity->id->__toString(),
+            'id' => $entity->getId()->__toString(),
             'email' => $entity->email,
             'hashed_password' => $entity->getHashedPassword(),
             'token' => $entity->getToken()?->token,

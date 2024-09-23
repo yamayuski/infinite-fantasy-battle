@@ -1445,12 +1445,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/shibare-framework/framework.git",
-                "reference": "39faa8bc594eb592f551dabd83609f58f798cb20"
+                "reference": "7b1abbf8de6e2252c8a916b169ad57fb30f41859"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shibare-framework/framework/zipball/39faa8bc594eb592f551dabd83609f58f798cb20",
-                "reference": "39faa8bc594eb592f551dabd83609f58f798cb20",
+                "url": "https://api.github.com/repos/shibare-framework/framework/zipball/7b1abbf8de6e2252c8a916b169ad57fb30f41859",
+                "reference": "7b1abbf8de6e2252c8a916b169ad57fb30f41859",
                 "shasum": ""
             },
             "require": {
@@ -1550,7 +1550,7 @@
                 "issues": "https://github.com/shibare-framework/framework/issues",
                 "source": "https://github.com/shibare-framework/framework/"
             },
-            "time": "2024-09-21T09:43:10+00:00"
+            "time": "2024-09-22T02:01:48+00:00"
         },
         {
             "name": "spiral/attributes",
