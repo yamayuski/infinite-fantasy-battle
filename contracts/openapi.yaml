@@ -133,7 +133,7 @@ paths:
         '4XX':
           $ref: "#/components/responses/InvalidRequestResponse"
   /api/auth/me:
-    get:
+    post:
       operationId: MeAuth
       summary: Get my information
       tags:
