@@ -25,36 +25,39 @@ class LargeNumber implements JsonSerializable, Stringable
         private int $exponent,
     ) {}
 
+    /**
+     * Create a LargeNumber from a string
+     * NOTICE: Negative number is not supported
+     * example: '1.23e45', '123.45e-67', '123.45'
+     * @param string $value
+     * @return LargeNumber
+     * @throws InvalidArgumentException
+     */
     public static function createFromString(string $value): self
     {
-        if (\str_contains($value, 'e')) {
-            [$base, $exponent] = \explode('e', \strtolower($value), 2);
+        if (\preg_match('/^(?P<int_part>[\d,]+)\.?(?P<fract_part>\d+)?e?(?P<exponent_part>\d*)?$/', $value, $matches)) {
+            // 1,234(.56e7)
+            $int_part = $matches['int_part'];
+            $fract_part = \array_key_exists('fract_part', $matches) ? $matches['fract_part'] : '';
+            $exponent_part = \array_key_exists('exponent_part', $matches) ? $matches['exponent_part'] : '';
 
-            $base = \str_replace('.', '', $base);
-            $decimal_positions = 0;
+            $int_part = \trim(\ltrim(\str_replace(',', '', $int_part), '0'));
+            $fract_part = \trim(\rtrim($fract_part, '0'));
+            $exponent_part = (int) \trim(\ltrim($exponent_part, '0'));
 
-            if (\strpos($value, '.') !== false) {
-                [$integer_part, $fractional_part] = \explode('.', \explode('e', $value)[0], 2);
-                $decimal_positions = \strlen($fractional_part);
+            $float = '0.' . $int_part . $fract_part;
+            $int_part_length = \strlen($int_part);
+            if ($int_part === '' && $fract_part > 0) {
+                $float = '0.' . \ltrim($fract_part, '0');
+                $int_part_length = -\strlen((string)$fract_part);
             }
 
-            $exponent = (int)$exponent + $decimal_positions - 1;
-            $float_part = '0.' . $base;
-
-            return new self((float) $float_part, (int) $exponent + 1);
-        } elseif (\preg_match('/^\d+\.?\d*$/', $value)) {
-            if (\strpos($value, '.') !== false) {
-                [$integer_part, $fractional_part] = \explode('.', $value, 2);
-            } else {
-                $integer_part = $value;
-                $fractional_part = '';
-            }
-
-            $number_without_decimal = $integer_part . $fractional_part;
-            $non_zero_digit_position = \strlen($integer_part);
-            $float_part = '0.' . $number_without_decimal;
-
-            return new self((float) $float_part, $non_zero_digit_position);
+            return new self(
+                (float) $float,
+                $int_part_length + $exponent_part,
+            );
+        } elseif (\str_starts_with($value, '-')) {
+            throw new InvalidArgumentException(\sprintf('Negative number is not supported: "%s"', $value));
         }
 
         throw new InvalidArgumentException(\sprintf('Invalid large number format: "%s"', $value));

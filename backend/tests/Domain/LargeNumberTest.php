@@ -22,18 +22,103 @@ final class LargeNumberTest extends TestCase
     public static function getCreateFromString(): array
     {
         return [
-            '1' => ['1', '1e0', '1'],
-            '10' => ['10', '1e1', '10'],
+            '0' => ['0', '0.000e0'],
+            '0.0' => ['0.0', '0.000e0'],
+            '0.0e0' => ['0.0e0', '0.000e0'],
+            '1' => ['1', '0.100e1'],
+            '10' => ['10', '0.100e2'],
+            '100' => ['100', '0.100e3'],
+            '1,000' => ['1,000', '0.100e4'],
+            '10,000' => ['10,000', '0.100e5'],
+            '100,000' => ['100,000', '0.100e6'],
+            '1,000,000' => ['1,000,000', '0.100e7'],
+            '10,000,000' => ['10,000,000', '0.100e8'],
+            '100,000,000' => ['100,000,000', '0.100e9'],
+            '1,000,000,000' => ['1,000,000,000', '0.100e10'],
+            '10,000,000,000' => ['10,000,000,000', '0.100e11'],
+            '100,000,000,000' => ['100,000,000,000', '0.100e12'],
+            '1,000,000,000,000' => ['1,000,000,000,000', '0.100e13'],
+            '10,000,000,000,000' => ['10,000,000,000,000', '0.100e14'],
+
+            '1.5' => ['1.5', '0.150e1'],
+            '10.5' => ['10.5', '0.105e2'],
+            '100.5' => ['100.5', '0.101e3'],
+            '1,000.5' => ['1,000.5', '0.100e4'],
+            '10,000.5' => ['10,000.5', '0.100e5'],
+            '100,000.5' => ['100,000.5', '0.100e6'],
+            '1,000,000.55555' => ['1,000,000.55555', '0.100e7'],
+
+            '0.00100' => ['0.00100', '0.100e-3'],
+
+            '1e1' => ['1e1', '0.100e2'],
+            '1e2' => ['1e2', '0.100e3'],
+            '1e3' => ['1e3', '0.100e4'],
+            '1e4' => ['1e4', '0.100e5'],
+            '1e5' => ['1e5', '0.100e6'],
+
+            '1.5e1' => ['1.5e1', '0.150e2'],
+
+            '1,000.555e5' => ['1,005.555e5', '0.101e9'],
+            '100,000,000,000,000,000,000.000000e100' => ['100,000,000,000,000,000,000.000000e100', '0.100e121'],
+
+            "1.0\n" => ["1.0\n", '0.100e1'],
         ];
     }
 
     #[Test]
     #[DataProvider('getCreateFromString')]
-    public function testCreateFromString(string $input, string $expected_string, string $expected_unit_string): void
+    public function testCreateFromString(string $input, string $expected_string): void
     {
         $actual = LargeNumber::createFromString($input);
 
-        self::assertSame($expected_string, $actual->__toString());
-        // self::assertSame($expected_unit_string, $actual->getWithUnit());
+        self::assertSame($expected_string, (string) $actual);
+    }
+
+    /**
+     * @return array<array-key, array<int, string>>
+     */
+    public static function getNegativeNumber(): array
+    {
+        return [
+            'negative' => ['-1'],
+            'negative with exponent' => ['-1e1'],
+            'negative with fract' => ['-1.0'],
+            'negative with fract and exponent' => ['-1.0e1'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('getNegativeNumber')]
+    public function testCreateFromStringWithNegativeNumber(string $input): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(\sprintf('Negative number is not supported: "%s"', $input));
+
+        LargeNumber::createFromString($input);
+    }
+
+    /**
+     * @return array<array-key, array<int, string>>
+     */
+    public static function getInvalidNumber(): array
+    {
+        return [
+            'empty' => [''],
+            'invalid' => ['invalid'],
+            'invalid with number' => ['invalid1'],
+            'invalid with exponent' => ['1einvalid'],
+            'invalid with fract' => ['1.invalid'],
+            'invalid with fract and exponent' => ['1.invalide1'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('getInvalidNumber')]
+    public function testCreateFromStringWithInvalidNumber(string $input): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(\sprintf('Invalid large number format: "%s"', $input));
+
+        LargeNumber::createFromString($input);
     }
 }
