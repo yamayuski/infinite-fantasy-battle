@@ -11,6 +11,4 @@ namespace Ifb\Infrastructure\Config;
 
 use LogicException;
 
-class InvalidConfigException extends LogicException
-{
-}
+class InvalidConfigException extends LogicException {}

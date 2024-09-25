@@ -28,7 +28,7 @@ final class PostHandlerTest extends HandlerTestCase
     #[Test]
     public function testInvokeAccountAlreadyExists(): void
     {
-        $this->seed('accounts', [
+        $this->seed('tbl_accounts', [
             'id' => '9b5fef32-1109-491b-b90e-aca9668ab90e',
             'email' => 'test@ifb.test',
             'hashed_password' => \password_hash('testtest', \PASSWORD_DEFAULT),

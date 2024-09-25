@@ -68,7 +68,7 @@ abstract class HandlerTestCase extends BaseTestCase
 
         $input->setServerRequest($request);
 
-        $this->seed('accounts', [
+        $this->seed('tbl_accounts', [
             'id' => $entity->getId()->__toString(),
             'email' => $entity->email,
             'hashed_password' => $entity->getHashedPassword(),

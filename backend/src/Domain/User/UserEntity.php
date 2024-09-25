@@ -24,9 +24,17 @@ class UserEntity implements JsonSerializable
     #[BelongsTo(target: AccountEntity::class, innerKey: 'account_id', outerKey: 'id')]
     private ?AccountEntity $account = null;
 
-    /** @var UserWeapon[]|null $weapons  */
-    #[HasMany(target: UserWeapon::class, innerKey: 'id', outerKey: 'account_id')]
-    private ?array $weapons = [];
+    /** @var UserWeapon[] $weapons  */
+    #[HasMany(target: UserWeapon::class, innerKey: 'account_id', outerKey: 'account_id')]
+    private array $weapons = [];
+
+    /** @var UserArmor[] $armors */
+    #[HasMany(target: UserArmor::class, innerKey: 'account_id', outerKey: 'account_id')]
+    private array $armors = [];
+
+    /** @var UserAccessory[] $accessories */
+    #[HasMany(target: UserAccessory::class, innerKey: 'account_id', outerKey: 'account_id')]
+    private array $accessories = [];
 
     /**
      * @param Identity<AccountEntity> $account_id
@@ -85,12 +93,46 @@ class UserEntity implements JsonSerializable
     }
 
     /**
-     * @param null|UserWeapon[] $weapons
+     * @param UserWeapon[] $weapons
      * @return void
      */
-    public function setUserWeapons(?array $weapons): void
+    public function setUserWeapons(array $weapons): void
     {
         $this->weapons = $weapons;
+    }
+
+    /**
+     * @return UserArmor[]
+     */
+    public function getUserArmors(): array
+    {
+        return $this->armors;
+    }
+
+    /**
+     * @param UserArmor[] $armors
+     * @return void
+     */
+    public function setUserArmors(array $armors): void
+    {
+        $this->armors = $armors;
+    }
+
+    /**
+     * @return UserAccessory[]
+     */
+    public function getUserAccessories(): ?array
+    {
+        return $this->accessories;
+    }
+
+    /**
+     * @param UserAccessory[] $accessories
+     * @return void
+     */
+    public function setUserAccessories(array $accessories): void
+    {
+        $this->accessories = $accessories;
     }
 
     public function getDisplayName(): string

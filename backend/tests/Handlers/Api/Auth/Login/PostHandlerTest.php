@@ -17,7 +17,7 @@ final class PostHandlerTest extends HandlerTestCase
     #[Test]
     public function testInvoke(): void
     {
-        $this->seed('accounts', [
+        $this->seed('tbl_accounts', [
             'id' => '9b5fef32-1109-491b-b90e-aca9668ab90e',
             'email' => 'example@ifb.test',
             'hashed_password' => \password_hash('testtest', \PASSWORD_DEFAULT),
@@ -31,7 +31,7 @@ final class PostHandlerTest extends HandlerTestCase
     #[Test]
     public function testInvokeNeedsRehash(): void
     {
-        $this->seed('accounts', [
+        $this->seed('tbl_accounts', [
             'id' => '9b5fef32-1109-491b-b90e-aca9668ab90e',
             'email' => 'example2@ifb.test',
             'hashed_password' => \password_hash('testtest', \PASSWORD_DEFAULT, ['cost' => 4]),

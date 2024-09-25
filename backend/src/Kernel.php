@@ -24,9 +24,7 @@ class Kernel
 {
     private ?ContainerInterface $container = null;
 
-    public function __construct(public readonly ConfigInterface $config)
-    {
-    }
+    public function __construct(public readonly ConfigInterface $config) {}
 
     public function boot(): void
     {

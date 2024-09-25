@@ -22,7 +22,7 @@ class UserAccessory implements JsonSerializable
     #[BelongsTo(target: MasterAccessory::class, innerKey: 'master_id', outerKey: 'id')]
     private ?MasterAccessory $master = null;
 
-    #[BelongsTo(target: UserEntity::class, innerKey: 'account_id', outerKey: 'id')]
+    #[BelongsTo(target: UserEntity::class, innerKey: 'account_id', outerKey: 'account_id')]
     private ?UserEntity $user = null;
 
     /**

@@ -48,7 +48,7 @@ class LargeNumber implements Stringable
             $int_part_length = \strlen($int_part);
             if ($int_part === '' && $fract_part > 0) {
                 $float = '0.' . \ltrim($fract_part, '0');
-                $int_part_length = -\strlen((string)$fract_part);
+                $int_part_length = -\strlen((string) $fract_part);
             }
 
             return new self(

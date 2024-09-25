@@ -22,7 +22,7 @@ class UserWeapon implements JsonSerializable
     #[BelongsTo(target: MasterWeapon::class, innerKey: 'master_id', outerKey: 'id')]
     private ?MasterWeapon $master = null;
 
-    #[BelongsTo(target: UserEntity::class, innerKey: 'account_id', outerKey: 'id')]
+    #[BelongsTo(target: UserEntity::class, innerKey: 'account_id', outerKey: 'account_id')]
     private ?UserEntity $user = null;
 
     /**

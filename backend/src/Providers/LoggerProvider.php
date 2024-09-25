@@ -28,7 +28,7 @@ class LoggerProvider implements ProviderInterface
             'jsonline' => new JsonLineFormatter(),
             default => throw new InvalidConfigException('Invalid logger.formatter'),
         };
-        $writer = match($config->getNonEmptyString('logger.writer')) {
+        $writer = match ($config->getNonEmptyString('logger.writer')) {
             'stderr' => new StderrWriter($formatter),
             'stdout' => new StdoutWriter($formatter),
             'null' => new NullWriter(),
