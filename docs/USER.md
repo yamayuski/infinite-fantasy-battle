@@ -20,18 +20,13 @@
 
 |名前|カラム名|情報|
 |---|---|---|
-|ユーザーID|user_id|ユーザーID|
+|ユーザーID|account_id|ユーザーID|
 |表示名|display_name|他のユーザーにも見える表示名|
-|レベル(少数部)|level_fract|ユーザーのレベル(0.0～1,000,000.x)|
-|レベル(累乗部)|level_power|ユーザーのレベル(10のx乗)|
-|経験値(少数部)|exp_fract|ユーザーの経験値(0.0～1,000,000.x)|
-|経験値(累乗部)|exp_power|ユーザーの経験値(10のx乗)|
-|所持金(少数部)|money_fract|ユーザーの所持金(0.0～1,000,000.x)|
-|所持金(累乗部)|money_power|ユーザーの所持金(10のx乗)|
-|HP(少数部)|hp_fract|ユーザーの現在HP(0.0～1,000,000.x)|
-|HP(累乗部)|hp_power|ユーザーの現在HP(10のx乗)|
-|最大HP(少数部)|max_hp_fract|ユーザーの最大HP(0.0～1,000,000.x)|
-|最大HP(累乗部)|max_hp_power|ユーザーの最大HP(10のx乗)|
+|レベル|level|ユーザーのレベル|
+|経験値|exp|ユーザーの経験値|
+|所持金|money|ユーザーの所持金|
+|HP|hp|ユーザーの現在HP|
+|最大HP|max_hp|ユーザーの最大HP|
 |腕力|strength|ユーザーの腕力|
 |持久力|vitality|ユーザーの持久力|
 |素早さ|agility|ユーザーの素早さ|
@@ -44,24 +39,20 @@
 |ID|id|識別子|
 |ユーザーID|user_id|ユーザーID|
 |マスターID|master_id|武器マスターID|
-|ジュエル1ID|jewel_1_id|ジュエル1つ目のID|
-|ジュエル2ID|jewel_2_id|ジュエル2つ目のID|
-|ジュエル3ID|jewel_3_id|ジュエル3つ目のID|
+|XP|xp|経験値(隠しパラメータ)|
 
 ## 武器マスター
 
 |名前|カラム名|情報|
 |---|---|---|
 |マスターID|master_id|武器マスターID|
-|名称|name|武器名|
+|名称|name|武器名称|
 |説明|description|フレーバーテキスト|
-|レアリティ|rarity|レア度|
-|進化レベル|evolution_level|武器進化レベル|
-|攻撃力(少数部)|attack_fract|武器の攻撃力|
-|攻撃力(累乗部)|attack_power|武器の攻撃力(10のx乗)|
-|クリティカル確率|critical_rate|武器のクリティカル発生確率(%)|
-|クリティカル倍率|critical_power_rate|クリティカル発生時の攻撃力上昇率(%)|
-|ジュエル装備可能数|jewel_count|ジュエル装備可能な数|
+|攻撃力|attack|基礎攻撃力|
+|クリティカル確率|critical_rate|基礎クリティカル率(%)|
+|クリティカル倍率|critical_multiplier|基礎クリティカル発生時のダメージ倍率(%)|
+|XP増加率|xp_bonus_rate|XPボーナス率(%)|
+|Capacity|capacity|絶対価値|
 
 ## 防具
 
@@ -70,22 +61,18 @@
 |ID|id|識別子|
 |ユーザーID|user_id|ユーザーID|
 |マスターID|master_id|防具マスターID|
-|ジュエル1ID|jewel_1_id|ジュエル1つ目のID|
-|ジュエル2ID|jewel_2_id|ジュエル2つ目のID|
-|ジュエル3ID|jewel_3_id|ジュエル3つ目のID|
+|XP|xp|経験値(隠しパラメータ)|
 
 ## 防具マスター
 
 |名前|カラム名|情報|
 |---|---|---|
 |マスターID|master_id|防具マスターID|
-|名称|name|防具名|
+|名称|name|防具名称|
 |説明|description|フレーバーテキスト|
-|レアリティ|rarity|レア度|
-|進化レベル|evolution_level|防具進化レベル|
-|防御力(少数部)|defense_fract|防具の防御力|
-|防御力(累乗部)|defense_power|防具の防御力(10のx乗)|
-|ジュエル装備可能数|jewel_count|ジュエル装備可能な数|
+|防御力|defense|基礎防御力|
+|XP増加率|xp_bonus_rate|XPボーナス率(%)|
+|Capacity|capacity|絶対価値|
 
 ## アクセサリ
 
@@ -94,9 +81,7 @@
 |ID|id|識別子|
 |ユーザーID|user_id|ユーザーID|
 |マスターID|master_id|アクセサリマスターID|
-|ジュエル1ID|jewel_1_id|ジュエル1つ目のID|
-|ジュエル2ID|jewel_2_id|ジュエル2つ目のID|
-|ジュエル3ID|jewel_3_id|ジュエル3つ目のID|
+|XP|xp|経験値(隠しパラメータ)|
 
 ## アクセサリマスター
 
@@ -105,29 +90,9 @@
 |マスターID|master_id|アクセサリーマスターID|
 |名称|name|アクセサリー名|
 |説明|description|フレーバーテキスト|
-|レアリティ|rarity|レア度|
-|進化レベル|evolution_level|アクセサリー進化レベル|
-|攻撃力|attack_rate|アクセサリーで向上する攻撃力増加率(%)|
-|防御力|defense_rate|アクセサリーで向上する防御力増加率(%)|
-|クリティカル確率|critical_rate|クリティカル発生増加率(%)|
-|クリティカル倍率|critical_power_rate|クリティカル発生時の攻撃力上昇率(%)|
-
-## ジュエル
-
-|名前|カラム名|情報|
-|---|---|---|
-|ID|id|識別子|
-|ユーザーID|user_id|ユーザーID|
-|マスターID|master_id|ジュエルマスターID|
-
-## ジュエルマスター
-
-|名前|カラム名|情報|
-|---|---|---|
-|マスターID|master_id|ジュエルマスターID|
-|名称|name|ジュエル名|
-|説明|description|フレーバーテキスト|
-|攻撃力|attack_rate|アクセサリーで向上する攻撃力増加率(%)|
-|防御力|defense_rate|アクセサリーで向上する防御力増加率(%)|
-|クリティカル確率|critical_rate|クリティカル発生増加率(%)|
-|クリティカル倍率|critical_power_rate|クリティカル発生時の攻撃力上昇率(%)|
+|攻撃力|attack|基礎攻撃力|
+|防御力|defense|基礎防御力|
+|クリティカル確率|critical_rate|基礎クリティカル率(%)|
+|クリティカル倍率|critical_multiplier|基礎クリティカル発生時のダメージ倍率(%)|
+|XP増加率|xp_bonus_rate|XPボーナス率(%)|
+|Capacity|capacity|絶対価値|

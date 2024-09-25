@@ -16,21 +16,19 @@ use Ifb\Domain\LargeNumber;
 use JsonSerializable;
 
 /**
- * Weapon master data
+ * Armor master data
  * @package Ifb\Domain\User
  */
-#[Entity(role: 'master_weapon', table: 'mst_weapons')]
-class MasterWeapon implements JsonSerializable
+#[Entity(role: 'master_armor', table: 'mst_armors')]
+class MasterArmor implements JsonSerializable
 {
     /**
-     * @param MasterId<MasterWeapon> $id 武器マスターID
-     * @param string $name 武器名称
+     * @param MasterId<MasterArmor> $id 防具マスターID
+     * @param string $name 防具名称
      * @param string $description フレーバーテキスト
-     * @param LargeNumber $attack 基礎攻撃力
-     * @param float $critial_rate 基礎クリティカル率(%)
-     * @param LargeNumber $critical_multiplier 基礎クリティカル時のダメージ倍率(%)
+     * @param LargeNumber $defense 基礎防御力
      * @param float $xp_bonus_rate XP ボーナス率(%)
-     * @param LargeNumber $capacity 絶対価値
+     * @param LargeNumber $capacity 潜在価値
      */
     public function __construct(
         #[Column(type: 'string', primary: true, typecast: [MasterId::class, 'castValue'])]
@@ -40,11 +38,7 @@ class MasterWeapon implements JsonSerializable
         #[Column(type: 'string')]
         private string $description,
         #[Column(type: 'string', typecast: [LargeNumber::class, 'createFromString'])]
-        private LargeNumber $attack,
-        #[Column(type: 'double')]
-        private float $critial_rate,
-        #[Column(type: 'string', typecast: [LargeNumber::class, 'createFromString'])]
-        private LargeNumber $critical_multiplier,
+        private LargeNumber $defense,
         #[Column(type: 'double')]
         private float $xp_bonus_rate,
         #[Column(type: 'string', typecast: [LargeNumber::class, 'createFromString'])]
@@ -52,7 +46,7 @@ class MasterWeapon implements JsonSerializable
     ) {}
 
     /**
-     * @return MasterId<MasterWeapon>
+     * @return MasterId<MasterArmor>
      */
     public function getId(): MasterId
     {
@@ -69,19 +63,9 @@ class MasterWeapon implements JsonSerializable
         return $this->description;
     }
 
-    public function getAttack(): LargeNumber
+    public function getDefense(): LargeNumber
     {
-        return $this->attack;
-    }
-
-    public function getCritialRate(): float
-    {
-        return $this->critial_rate;
-    }
-
-    public function getCriticalMultiplier(): LargeNumber
-    {
-        return $this->critical_multiplier;
+        return $this->defense;
     }
 
     public function getXpBonusRate(): float
@@ -100,9 +84,7 @@ class MasterWeapon implements JsonSerializable
             'id' => $this->id->id,
             'name' => $this->name,
             'description' => $this->description,
-            'attack' => $this->attack->toHumanReadableString(),
-            'critial_rate' => $this->critial_rate,
-            'critical_multiplier' => $this->critical_multiplier->toHumanReadableString(),
+            'defense' => $this->defense->toHumanReadableString(),
             'xp_bonus_rate' => $this->xp_bonus_rate,
             'capacity' => $this->capacity->toHumanReadableString(),
         ];

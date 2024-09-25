@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Ifb\Domain;
 
 use InvalidArgumentException;
-use JsonSerializable;
 use Stringable;
 
 /**
@@ -18,9 +17,9 @@ use Stringable;
  * It may lose precision but it is enough for our use case
  * @package Ifb\Domain
  */
-class LargeNumber implements JsonSerializable, Stringable
+class LargeNumber implements Stringable
 {
-    public function __construct(
+    private function __construct(
         private float $fract,
         private int $exponent,
     ) {}
@@ -63,26 +62,41 @@ class LargeNumber implements JsonSerializable, Stringable
         throw new InvalidArgumentException(\sprintf('Invalid large number format: "%s"', $value));
     }
 
-    public function jsonSerialize(): mixed
-    {
-        return [
-            'fract' => $this->fract,
-            'exponent' => $this->exponent,
-        ];
-    }
-
     public function __toString(): string
     {
         return \number_format($this->fract, 3) . 'e' . $this->exponent;
     }
 
-    public function getWithUnit(): string
+    /**
+     * Convert to a human readable string
+     * like: 999999 -> 999,999.000, 1000000 -> 1.000 a, 1000000000 -> 1.000 b
+     * @return string
+     */
+    public function toHumanReadableString(): string
     {
-        return \number_format($this->fract, 3) . ' ' . $this->getUnit();
+        if ($this->exponent < 7) {
+            return \number_format($this->fract * 10 ** $this->exponent, 3);
+        }
+
+        $number = $this->fract * (10 ** ($this->exponent % 3));
+        $unitIndex = \intdiv($this->exponent, 3);
+
+        $unit = $this->generateUnitFromIndex($unitIndex - 1);
+
+        return sprintf('%.3f %s', $number, $unit);
     }
 
-    public function getUnit(): string
+    protected function generateUnitFromIndex(int $index): string
     {
-        throw new \LogicException('TODO');
+        $alphabets = \range('a', 'z');
+        $unit = '';
+
+        while ($index > 0) {
+            $index--;
+            $unit = $alphabets[$index % 26] . $unit;
+            $index = \intdiv($index, 26);
+        }
+
+        return $unit;
     }
 }

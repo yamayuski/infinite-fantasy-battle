@@ -121,4 +121,43 @@ final class LargeNumberTest extends TestCase
 
         LargeNumber::createFromString($input);
     }
+
+    /**
+     * @return array<array-key, array<int, string>>
+     */
+    public static function getToHumanReadableString(): array
+    {
+        return [
+            '0' => ['0', '0.000'],
+            '10' => ['10', '10.000'],
+            '100' => ['100', '100.000'],
+            '1,000' => ['1,000', '1,000.000'],
+            '10,000' => ['10,000', '10,000.000'],
+            '100,000' => ['100,000', '100,000.000'],
+
+            '999,999' => ['999,999', '999,999.000'],
+            '1,000,000' => ['1,000,000', '1.000 a'],
+            '1,100,000' => ['1,100,000', '1.100 a'],
+            '5,250,000' => ['5,250,000', '5.250 a'],
+            '10,000,000' => ['10,000,000', '10.000 a'],
+            '100,000,000' => ['100,000,000', '0.100 b'],
+            '1,000,000,000' => ['1,000,000,000', '1.000 b'],
+            '1,100,000,000' => ['1,100,000,000', '1.100 b'],
+            '1,000,000,000,000' => ['1,000,000,000,000', '1.000 c'],
+            '1e15' => ['1e15', '1.000 d'],
+            '1e18' => ['1e18', '1.000 e'],
+            '1e81' => ['1e81', '1.000 z'],
+            '1e84' => ['1e84', '1.000 aa'],
+            '1e87' => ['1e87', '1.000 ab'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('getToHumanReadableString')]
+    public function testToHumanReadableString(string $input, string $expected): void
+    {
+        $actual = LargeNumber::createFromString($input);
+
+        self::assertSame($expected, $actual->toHumanReadableString());
+    }
 }

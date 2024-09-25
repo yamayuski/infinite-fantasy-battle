@@ -26,5 +26,6 @@
 
     <php>
         <env name="LOGGER_WRITER" value="null" />
+        <env name="SQLITE_CONNECTION" value="memory" />
     </php>
 </phpunit>

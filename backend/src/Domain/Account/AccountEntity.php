@@ -11,16 +11,21 @@ namespace Ifb\Domain\Account;
 
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
+use Cycle\Annotated\Annotation\Relation\HasOne;
 use Cycle\Annotated\Annotation\Table\Index;
 use Ifb\Domain\Identity\Identity;
+use Ifb\Domain\User\UserEntity;
 use JsonSerializable;
 use SensitiveParameter;
 
-#[Entity(role: 'account', table: 'accounts')]
+#[Entity(role: 'account', table: 'tbl_accounts')]
 #[Index(['email'], unique: true)]
 #[Index(['token'], unique: true)]
 class AccountEntity implements JsonSerializable
 {
+    #[HasOne(target: UserEntity::class, innerKey: 'id', outerKey: 'account_id')]
+    private ?UserEntity $user = null;
+
     /**
      * @param Identity<AccountEntity> $id
      * @param string $email
@@ -38,6 +43,16 @@ class AccountEntity implements JsonSerializable
         #[Column(type: 'string', nullable: true, typecast: [LoginToken::class, 'castValue'])]
         private ?LoginToken $token = null,
     ) {}
+
+    public function getUser(): ?UserEntity
+    {
+        return $this->user;
+    }
+
+    public function setUser(?UserEntity $user): void
+    {
+        $this->user = $user;
+    }
 
     /**
      * Get ID
